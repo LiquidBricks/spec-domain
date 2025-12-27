@@ -1,0 +1,15 @@
+{
+  "name": "@liquid-bricks/spec-domain",
+  "version": "1.0.0",
+  "description": "Domain schema and metadata definitions.",
+  "main": "./index.js",
+  "type": "module",
+  "exports": {
+    "./domain": "./index.js"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "test": "clear && node test/run.js"
+  },
+  "license": "ISC"
+}
