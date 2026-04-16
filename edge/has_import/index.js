@@ -1,11 +1,11 @@
-import { component_component, meta as componentComponentMeta } from './component_component/index.js';
+import { component_importRef, meta as componentImportRefMeta } from './component_importRef/index.js';
 
 export function has_import({ g, diagnostics }) {
   return {
-    component_component: component_component({ g, diagnostics }),
+    component_importRef: component_importRef({ g, diagnostics }),
   };
 }
 
 export const meta = {
-  component_component: componentComponentMeta,
+  component_importRef: componentImportRefMeta,
 }

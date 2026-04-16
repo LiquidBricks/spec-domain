@@ -1,17 +1,16 @@
 export const schema = {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "vertex.task",
+  "title": "vertex.gateRef",
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "name",
+    "alias",
     "fnc",
-    "codeRef",
     "createdAt",
     "updatedAt"
   ],
   "properties": {
-    "name": { "type": "string" },
+    "alias": { "type": "string" },
     "fnc": { "type": "string" },
     "codeRef": {
       "type": "object",
