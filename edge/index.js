@@ -9,6 +9,7 @@ import { wait_for, meta as waitForMeta } from './wait_for/index.js';
 import { has_stateMachine, meta as hasStateMachineMeta } from './has_stateMachine/index.js';
 import { has_import, meta as hasImportMeta } from './has_import/index.js';
 import { has_gate, meta as hasGateMeta } from './has_gate/index.js';
+import { has_agentFn, meta as hasAgentFnMeta } from './has_agentFn/index.js';
 import { uses_import, meta as usesImportMeta } from './uses_import/index.js';
 import { injects_into, meta as injectsIntoMeta } from './injects_into/index.js';
 import { import_of, meta as importOfMeta } from './import_of/index.js';
@@ -28,6 +29,7 @@ export function edge({ g, diagnostics }) {
     has_stateMachine: has_stateMachine({ g, diagnostics }),
     has_import: has_import({ g, diagnostics }),
     has_gate: has_gate({ g, diagnostics }),
+    has_agentFn: has_agentFn({ g, diagnostics }),
     import_of: import_of({ g, diagnostics }),
     uses_import: uses_import({ g, diagnostics }),
     gate_of: gate_of({ g, diagnostics }),
@@ -48,6 +50,7 @@ export const meta = {
   has_stateMachine: hasStateMachineMeta,
   has_import: hasImportMeta,
   has_gate: hasGateMeta,
+  has_agentFn: hasAgentFnMeta,
   import_of: importOfMeta,
   uses_import: usesImportMeta,
   gate_of: gateOfMeta,
