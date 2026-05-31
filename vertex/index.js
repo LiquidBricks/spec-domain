@@ -9,6 +9,7 @@ import { importInstanceRef, meta as importInstanceRefMeta } from './importInstan
 import { gateRef, meta as gateRefMeta } from './gateRef/index.js';
 import { gateInstanceRef, meta as gateInstanceRefMeta } from './gateInstanceRef/index.js';
 import { agentFn, meta as agentFnMeta } from './agentFn/index.js';
+import { componentAgent, meta as componentAgentMeta } from './componentAgent/index.js';
 
 export function vertex({ g, diagnostics }) {
   return {
@@ -23,6 +24,7 @@ export function vertex({ g, diagnostics }) {
     gateRef: gateRef({ g, diagnostics }),
     gateInstanceRef: gateInstanceRef({ g, diagnostics }),
     agentFn: agentFn({ g, diagnostics }),
+    componentAgent: componentAgent({ g, diagnostics }),
   };
 }
 export const meta = {
@@ -37,4 +39,5 @@ export const meta = {
   gateRef: gateRefMeta,
   gateInstanceRef: gateInstanceRefMeta,
   agentFn: agentFnMeta,
+  componentAgent: componentAgentMeta,
 }
