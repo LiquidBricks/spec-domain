@@ -1,0 +1,3 @@
+export function readTaskDeps({ g, domain }) {
+  return ({ vertexId }) => g.V(vertexId).out(domain.edge.has_dependency.task_task.constants.LABEL).id();
+}
