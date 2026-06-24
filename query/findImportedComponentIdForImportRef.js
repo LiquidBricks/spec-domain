@@ -1,3 +1,8 @@
-export function findImportedComponentIdForImportRef({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).out(domain.edge.import_of.importRef_component.constants.LABEL).id();
+import { meta as edge } from '../edge/index.js';
+
+export function findImportedComponentIdForImportRef({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .out(edge.import_of.importRef_component.constants.LABEL)
+    .id();
 }

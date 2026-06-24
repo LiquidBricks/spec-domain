@@ -1,3 +1,5 @@
-export function readIdentifierValues({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('instanceId');
+export function readIdentifierValues({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('instanceId');
 }

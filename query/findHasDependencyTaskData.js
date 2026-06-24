@@ -1,3 +1,8 @@
-export function findHasDependencyTaskData({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).out(domain.edge.has_dependency.task_data.constants.LABEL).id();
+import { meta as edge } from '../edge/index.js';
+
+export function findHasDependencyTaskData({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .out(edge.has_dependency.task_data.constants.LABEL)
+    .id();
 }

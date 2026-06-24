@@ -1,3 +1,5 @@
-export function readGateRefAliasAndFunction({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('alias', 'fnc');
+export function readGateRefAliasAndFunction({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('alias', 'fnc');
 }

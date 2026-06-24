@@ -1,3 +1,5 @@
-export function readCompletedState({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('state');
+export function readCompletedState({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('state');
 }

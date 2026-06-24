@@ -1,3 +1,5 @@
-export function readComponentHash({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('hash');
+export function readComponentHash({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('hash');
 }

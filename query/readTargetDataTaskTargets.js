@@ -1,3 +1,8 @@
-export function readTargetDataTaskTargets({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).out(domain.edge.injects_into.data_task.constants.LABEL).id();
+import { meta as edge } from '../edge/index.js';
+
+export function readTargetDataTaskTargets({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .out(edge.injects_into.data_task.constants.LABEL)
+    .id();
 }

@@ -1,3 +1,5 @@
-export function readBlockedGateState({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('state');
+export function readBlockedGateState({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('state');
 }

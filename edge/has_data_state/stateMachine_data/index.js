@@ -13,9 +13,49 @@ function create({ g, diagnostics }) {
   }
 }
 
+function setRunning({ g, diagnostics }) {
+  return async function ({ edgeId, updatedAt }) {
+    return g
+      .E(edgeId)
+      .property('status', constants.Status.RUNNING)
+      .property('updatedAt', updatedAt);
+  }
+}
+
+function setStatus({ g, diagnostics }) {
+  return async function ({ edgeId, status }) {
+    return g
+      .E(edgeId)
+      .property('status', status);
+  }
+}
+
+function setStatusAndResult({ g, diagnostics }) {
+  return async function ({ edgeId, status, result }) {
+    return g
+      .E(edgeId)
+      .property('status', status)
+      .property('result', result);
+  }
+}
+
+function updateResultStatusUpdatedAt({ g, diagnostics }) {
+  return async function ({ edgeId, result, status, updatedAt }) {
+    return g
+      .E(edgeId)
+      .property('result', result)
+      .property('status', status)
+      .property('updatedAt', updatedAt);
+  }
+}
+
 export function stateMachine_data({ g, diagnostics }) {
   return {
-    create: create({ g, diagnostics })
+    create: create({ g, diagnostics }),
+    setRunning: setRunning({ g, diagnostics }),
+    setStatus: setStatus({ g, diagnostics }),
+    setStatusAndResult: setStatusAndResult({ g, diagnostics }),
+    updateResultStatusUpdatedAt: updateResultStatusUpdatedAt({ g, diagnostics }),
   }
 }
 

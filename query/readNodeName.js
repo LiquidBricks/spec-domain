@@ -1,3 +1,5 @@
-export function readNodeName({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('name');
+export function readNodeName({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('name');
 }

@@ -1,3 +1,5 @@
-export function readChildState({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('state');
+export function readChildState({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('state');
 }

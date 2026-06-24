@@ -1,3 +1,5 @@
-export function readStateEdgeStatusAndResult({ g, domain }) {
-  return ({ edgeId }) => g.E(edgeId).valueMap('status', 'result');
+export function readStateEdgeStatusAndResult({ g }) {
+  return ({ edgeId }) => g
+    .E(edgeId)
+    .valueMap('status', 'result');
 }

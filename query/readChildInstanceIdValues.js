@@ -1,3 +1,5 @@
-export function readChildInstanceIdValues({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('instanceId');
+export function readChildInstanceIdValues({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('instanceId');
 }

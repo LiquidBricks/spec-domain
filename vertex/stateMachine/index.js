@@ -14,9 +14,29 @@ function create({ g, diagnostics }) {
   }
 }
 
+function setRunning({ g, diagnostics }) {
+  return async function ({ stateMachineId, updatedAt = new Date().toISOString() }) {
+    return g
+      .V(stateMachineId)
+      .property('state', constants.STATES.RUNNING)
+      .property('updatedAt', updatedAt);
+  }
+}
+
+function setComplete({ g, diagnostics }) {
+  return async function ({ stateMachineId, updatedAt = new Date().toISOString() }) {
+    return g
+      .V(stateMachineId)
+      .property('state', constants.STATES.COMPLETE)
+      .property('updatedAt', updatedAt);
+  }
+}
+
 export function stateMachine({ g, diagnostics }) {
   return {
-    create: create({ g, diagnostics })
+    create: create({ g, diagnostics }),
+    setRunning: setRunning({ g, diagnostics }),
+    setComplete: setComplete({ g, diagnostics }),
   }
 }
 

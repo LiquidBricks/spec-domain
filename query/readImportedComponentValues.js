@@ -1,3 +1,5 @@
-export function readImportedComponentValues({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('hash');
+export function readImportedComponentValues({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('hash');
 }

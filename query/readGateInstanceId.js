@@ -1,3 +1,5 @@
-export function readGateInstanceId({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('instanceId');
+export function readGateInstanceId({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('instanceId');
 }

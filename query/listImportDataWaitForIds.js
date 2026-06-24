@@ -1,3 +1,8 @@
-export function listImportDataWaitForIds({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).out(domain.edge.wait_for.importRef_data.constants.LABEL).id();
+import { meta as edge } from '../edge/index.js';
+
+export function listImportDataWaitForIds({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .out(edge.wait_for.importRef_data.constants.LABEL)
+    .id();
 }

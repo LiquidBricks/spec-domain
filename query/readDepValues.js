@@ -1,3 +1,5 @@
-export function readDepValues({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('label', 'name');
+export function readDepValues({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('label', 'name');
 }

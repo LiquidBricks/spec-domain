@@ -14,9 +14,18 @@ function create({ g, diagnostics }) {
   }
 }
 
+function setLifecycleWaitFor({ g, diagnostics }) {
+  return async function ({ importRefId, waitFor }) {
+    return g
+      .V(importRefId)
+      .property(constants.LIFECYCLE_WAIT_FOR_PROPERTY, waitFor);
+  }
+}
+
 export function importRef({ g, diagnostics }) {
   return {
-    create: create({ g, diagnostics })
+    create: create({ g, diagnostics }),
+    setLifecycleWaitFor: setLifecycleWaitFor({ g, diagnostics }),
   }
 }
 

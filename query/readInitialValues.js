@@ -1,3 +1,5 @@
-export function readInitialValues({ g, domain }) {
-  return ({ edgeId }) => g.E(edgeId).valueMap('status', 'result', 'updatedAt');
+export function readInitialValues({ g }) {
+  return ({ edgeId }) => g
+    .E(edgeId)
+    .valueMap('status', 'result', 'updatedAt');
 }

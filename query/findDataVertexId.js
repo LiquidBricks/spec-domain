@@ -1,3 +1,6 @@
-export function findDataVertexId({ g, domain }) {
-  return ({ edgeId }) => g.E(edgeId).inV().id();
+export function findDataVertexId({ g }) {
+  return ({ edgeId }) => g
+    .E(edgeId)
+    .inV()
+    .id();
 }

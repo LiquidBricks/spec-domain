@@ -1,3 +1,5 @@
-export function readValues({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('alias');
+export function readValues({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('alias');
 }

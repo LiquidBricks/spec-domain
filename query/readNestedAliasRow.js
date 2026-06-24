@@ -1,3 +1,5 @@
-export function readNestedAliasRow({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('alias');
+export function readNestedAliasRow({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('alias');
 }

@@ -1,3 +1,9 @@
-export function findParentInstanceVertexId({ g, domain }) {
-  return ({ instanceId }) => g.V().has('label', domain.vertex.componentInstance.constants.LABEL).has('instanceId', instanceId).id();
+import { meta as vertex } from '../vertex/index.js';
+
+export function findParentInstanceVertexId({ g }) {
+  return ({ instanceId }) => g
+    .V()
+    .has('label', vertex.componentInstance.constants.LABEL)
+    .has('instanceId', instanceId)
+    .id();
 }

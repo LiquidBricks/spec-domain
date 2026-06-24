@@ -1,3 +1,6 @@
-export function readStateEdgeTargetName({ g, domain }) {
-  return ({ edgeId }) => g.E(edgeId).inV().valueMap('name');
+export function readStateEdgeTargetName({ g }) {
+  return ({ edgeId }) => g
+    .E(edgeId)
+    .inV()
+    .valueMap('name');
 }

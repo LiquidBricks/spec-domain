@@ -1,3 +1,6 @@
-export function findTaskNodeId({ g, domain }) {
-  return ({ edgeId }) => g.E(edgeId).inV().id();
+export function findTaskNodeId({ g }) {
+  return ({ edgeId }) => g
+    .E(edgeId)
+    .inV()
+    .id();
 }

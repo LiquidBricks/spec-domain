@@ -1,3 +1,5 @@
-export function readImportRefValues({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('alias');
+export function readImportRefValues({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('alias');
 }

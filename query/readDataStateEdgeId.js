@@ -1,3 +1,8 @@
-export function readDataStateEdgeId({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).outE(domain.edge.has_data_state.stateMachine_data.constants.LABEL).id();
+import { meta as edge } from '../edge/index.js';
+
+export function readDataStateEdgeId({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .outE(edge.has_data_state.stateMachine_data.constants.LABEL)
+    .id();
 }

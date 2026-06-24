@@ -1,37 +1,41 @@
 import { findBootstrapTaskId } from "./findBootstrapTaskId.js";
 import { findComponentAgentVertexId } from "./findComponentAgentVertexId.js";
+import { findComponentDataNodeIdByName } from "./findComponentDataNodeIdByName.js";
 import { findComponentIdByHash } from "./findComponentIdByHash.js";
 import { findComponentIdForData } from "./findComponentIdForData.js";
 import { findComponentIdForDeferred } from "./findComponentIdForDeferred.js";
 import { findComponentIdForInstance } from "./findComponentIdForInstance.js";
 import { findComponentIdForTask } from "./findComponentIdForTask.js";
 import { findComponentInstanceVertexId } from "./findComponentInstanceVertexId.js";
-import { findComponentNodeIdByName } from "./findComponentNodeIdByName.js";
+import { findComponentTaskNodeIdByName } from "./findComponentTaskNodeIdByName.js";
 import { findComponentVertexId } from "./findComponentVertexId.js";
 import { findData1Id } from "./findData1Id.js";
 import { findDataId } from "./findDataId.js";
 import { findDataOneId } from "./findDataOneId.js";
 import { findDataStateEdgeIdByName } from "./findDataStateEdgeIdByName.js";
+import { findDataStateEdgeIdForTargetNode } from "./findDataStateEdgeIdForTargetNode.js";
+import { findDataStateEdgeTargetNodeId } from "./findDataStateEdgeTargetNodeId.js";
 import { findDataTwoId } from "./findDataTwoId.js";
 import { findDataVertexId } from "./findDataVertexId.js";
 import { findDeferredId } from "./findDeferredId.js";
-import { findDependencyTargetNodeId } from "./findDependencyTargetNodeId.js";
+import { findDependencyDataTargetNodeIdByName } from "./findDependencyDataTargetNodeIdByName.js";
+import { findDependencyDeferredTargetNodeIdByName } from "./findDependencyDeferredTargetNodeIdByName.js";
+import { findDependencyTaskTargetNodeIdByName } from "./findDependencyTaskTargetNodeIdByName.js";
 import { findDependentComponentId } from "./findDependentComponentId.js";
-import { findEdgeId } from "./findEdgeId.js";
 import { findEdgeTargetNodeId } from "./findEdgeTargetNodeId.js";
 import { findFirstComponentId } from "./findFirstComponentId.js";
 import { findFirstInitId } from "./findFirstInitId.js";
-import { findGatedComponentIdByHash } from "./findGatedComponentIdByHash.js";
-import { findGatedComponentIdForGateRef } from "./findGatedComponentIdForGateRef.js";
-import { findGatedInstanceComponentId } from "./findGatedInstanceComponentId.js";
-import { findGatedInstanceVertexIdByAlias } from "./findGatedInstanceVertexIdByAlias.js";
-import { findGatedInstanceVertexIdForRef } from "./findGatedInstanceVertexIdForRef.js";
 import { findGateInstanceRefIdByAlias } from "./findGateInstanceRefIdByAlias.js";
 import { findGateInstanceRefIdForInstance } from "./findGateInstanceRefIdForInstance.js";
 import { findGateInstanceVertexIdByAlias } from "./findGateInstanceVertexIdByAlias.js";
 import { findGateInstanceVertexIdForRef } from "./findGateInstanceVertexIdForRef.js";
 import { findGateRefIdByAlias } from "./findGateRefIdByAlias.js";
 import { findGateRefIdForInstanceRef } from "./findGateRefIdForInstanceRef.js";
+import { findGatedComponentIdByHash } from "./findGatedComponentIdByHash.js";
+import { findGatedComponentIdForGateRef } from "./findGatedComponentIdForGateRef.js";
+import { findGatedInstanceComponentId } from "./findGatedInstanceComponentId.js";
+import { findGatedInstanceVertexIdByAlias } from "./findGatedInstanceVertexIdByAlias.js";
+import { findGatedInstanceVertexIdForRef } from "./findGatedInstanceVertexIdForRef.js";
 import { findHasDataStateStateMachineData } from "./findHasDataStateStateMachineData.js";
 import { findHasDependencyDataData } from "./findHasDependencyDataData.js";
 import { findHasDependencyDataDeferred } from "./findHasDependencyDataDeferred.js";
@@ -41,17 +45,18 @@ import { findHasDependencyTaskData } from "./findHasDependencyTaskData.js";
 import { findHasDependencyTaskDeferred } from "./findHasDependencyTaskDeferred.js";
 import { findHasDependencyTaskTask } from "./findHasDependencyTaskTask.js";
 import { findHasTaskStateStateMachineTask } from "./findHasTaskStateStateMachineTask.js";
-import { findImportedComponentIdByHash } from "./findImportedComponentIdByHash.js";
-import { findImportedComponentIdForImportRef } from "./findImportedComponentIdForImportRef.js";
-import { findImportedInstanceVertexIdByAlias } from "./findImportedInstanceVertexIdByAlias.js";
-import { findImportedInstanceVertexIdForRef } from "./findImportedInstanceVertexIdForRef.js";
-import { findImportInjectionTargetNodeId } from "./findImportInjectionTargetNodeId.js";
+import { findImportInjectionDataTargetNodeIdByName } from "./findImportInjectionDataTargetNodeIdByName.js";
+import { findImportInjectionTaskTargetNodeIdByName } from "./findImportInjectionTaskTargetNodeIdByName.js";
 import { findImportInstanceRefIdByAlias } from "./findImportInstanceRefIdByAlias.js";
 import { findImportInstanceRefIdForInstance } from "./findImportInstanceRefIdForInstance.js";
 import { findImportInstanceVertexId } from "./findImportInstanceVertexId.js";
 import { findImportRefIdByAlias } from "./findImportRefIdByAlias.js";
 import { findImportRefIdForInstanceRef } from "./findImportRefIdForInstanceRef.js";
 import { findImportRefLookupId } from "./findImportRefLookupId.js";
+import { findImportedComponentIdByHash } from "./findImportedComponentIdByHash.js";
+import { findImportedComponentIdForImportRef } from "./findImportedComponentIdForImportRef.js";
+import { findImportedInstanceVertexIdByAlias } from "./findImportedInstanceVertexIdByAlias.js";
+import { findImportedInstanceVertexIdForRef } from "./findImportedInstanceVertexIdForRef.js";
 import { findInjectsIntoDataTask } from "./findInjectsIntoDataTask.js";
 import { findInjectsIntoTaskData } from "./findInjectsIntoTaskData.js";
 import { findInstanceVertexId } from "./findInstanceVertexId.js";
@@ -60,8 +65,6 @@ import { findLinkedGateRefId } from "./findLinkedGateRefId.js";
 import { findMainTaskId } from "./findMainTaskId.js";
 import { findNestedImportRefId } from "./findNestedImportRefId.js";
 import { findNestedInstanceVertexId } from "./findNestedInstanceVertexId.js";
-import { findNextInstanceVertexId } from "./findNextInstanceVertexId.js";
-import { findOwningComponentId } from "./findOwningComponentId.js";
 import { findOwningGateInstanceRefId } from "./findOwningGateInstanceRefId.js";
 import { findParentGateId } from "./findParentGateId.js";
 import { findParentId } from "./findParentId.js";
@@ -74,9 +77,6 @@ import { findProviderTaskId } from "./findProviderTaskId.js";
 import { findRootDataId } from "./findRootDataId.js";
 import { findRootInstanceVertexId } from "./findRootInstanceVertexId.js";
 import { findSharedComponentId } from "./findSharedComponentId.js";
-import { findStateEdgeIdByTypeAndName } from "./findStateEdgeIdByTypeAndName.js";
-import { findStateEdgeIdForTargetNode } from "./findStateEdgeIdForTargetNode.js";
-import { findStateEdgeTargetNodeId } from "./findStateEdgeTargetNodeId.js";
 import { findTargetComponentId } from "./findTargetComponentId.js";
 import { findTargetDataId } from "./findTargetDataId.js";
 import { findTargetTaskId } from "./findTargetTaskId.js";
@@ -86,48 +86,58 @@ import { findTaskAId } from "./findTaskAId.js";
 import { findTaskBId } from "./findTaskBId.js";
 import { findTaskNodeId } from "./findTaskNodeId.js";
 import { findTaskStateEdgeIdByName } from "./findTaskStateEdgeIdByName.js";
+import { findTaskStateEdgeIdForTargetNode } from "./findTaskStateEdgeIdForTargetNode.js";
+import { findTaskStateEdgeTargetNodeId } from "./findTaskStateEdgeTargetNodeId.js";
 import { findUsesGateGateInstanceRefComponentInstance } from "./findUsesGateGateInstanceRefComponentInstance.js";
 import { findUsesImportImportInstanceRefComponentInstance } from "./findUsesImportImportInstanceRefComponentInstance.js";
 import { findWordsComponentId } from "./findWordsComponentId.js";
 import { findWordsProcessId } from "./findWordsProcessId.js";
 import { findWordsVocabId } from "./findWordsVocabId.js";
-import { listAgentFnIds } from "./listAgentFnIds.js";
+import { listComponentAgentFnIds } from "./listComponentAgentFnIds.js";
 import { listComponentDataIds } from "./listComponentDataIds.js";
 import { listComponentIds } from "./listComponentIds.js";
 import { listComponentTaskIds } from "./listComponentTaskIds.js";
+import { listDataDependencyAndWaitForNodeIds } from "./listDataDependencyAndWaitForNodeIds.js";
+import { listDataDependencyNodeIds } from "./listDataDependencyNodeIds.js";
 import { listDataNodeIds } from "./listDataNodeIds.js";
 import { listDataStateEdgeIds } from "./listDataStateEdgeIds.js";
-import { listDependencyNodeIds } from "./listDependencyNodeIds.js";
-import { listDependentDataNodeIds } from "./listDependentDataNodeIds.js";
-import { listDependentTaskNodeIds } from "./listDependentTaskNodeIds.js";
+import { listDataToDataInjectionEdgeIds } from "./listDataToDataInjectionEdgeIds.js";
+import { listDataToTaskInjectionEdgeIds } from "./listDataToTaskInjectionEdgeIds.js";
+import { listDepTaskIds } from "./listDepTaskIds.js";
+import { listDependentDataNodeIdsForData } from "./listDependentDataNodeIdsForData.js";
+import { listDependentDataNodeIdsForTask } from "./listDependentDataNodeIdsForTask.js";
+import { listDependentTaskNodeIdsForData } from "./listDependentTaskNodeIdsForData.js";
+import { listDependentTaskNodeIdsForTask } from "./listDependentTaskNodeIdsForTask.js";
 import { listDepsDataIds } from "./listDepsDataIds.js";
 import { listDepsTaskIds } from "./listDepsTaskIds.js";
-import { listDepTaskIds } from "./listDepTaskIds.js";
 import { listGateDataWaitForIds } from "./listGateDataWaitForIds.js";
-import { listGatedInstanceIds } from "./listGatedInstanceIds.js";
 import { listGateInstanceRefIds } from "./listGateInstanceRefIds.js";
 import { listGateParentInstanceVertexIds } from "./listGateParentInstanceVertexIds.js";
 import { listGateRefIds } from "./listGateRefIds.js";
 import { listGateRefInstanceIds } from "./listGateRefInstanceIds.js";
 import { listGateTaskWaitForIds } from "./listGateTaskWaitForIds.js";
+import { listGatedInstanceIds } from "./listGatedInstanceIds.js";
 import { listImportDataWaitForIds } from "./listImportDataWaitForIds.js";
-import { listImportedComponentIds } from "./listImportedComponentIds.js";
-import { listImportedInstanceIds } from "./listImportedInstanceIds.js";
 import { listImportInstanceRefIds } from "./listImportInstanceRefIds.js";
 import { listImportInstanceVertexIds } from "./listImportInstanceVertexIds.js";
 import { listImportParentInstanceVertexIds } from "./listImportParentInstanceVertexIds.js";
 import { listImportRefIds } from "./listImportRefIds.js";
 import { listImportRefInstanceIds } from "./listImportRefInstanceIds.js";
 import { listImportTaskWaitForIds } from "./listImportTaskWaitForIds.js";
+import { listImportedComponentIds } from "./listImportedComponentIds.js";
+import { listImportedInstanceIds } from "./listImportedInstanceIds.js";
 import { listInstanceOfIds } from "./listInstanceOfIds.js";
 import { listMidImportInstanceRefIds } from "./listMidImportInstanceRefIds.js";
 import { listMidInstanceIds } from "./listMidInstanceIds.js";
 import { listNestedComponentIds } from "./listNestedComponentIds.js";
 import { listParentGateInstanceIds } from "./listParentGateInstanceIds.js";
 import { listParentInstanceIds } from "./listParentInstanceIds.js";
-import { listStateEdgeIds } from "./listStateEdgeIds.js";
-import { listTargetEdgeIds } from "./listTargetEdgeIds.js";
+import { listTaskDependencyAndWaitForNodeIds } from "./listTaskDependencyAndWaitForNodeIds.js";
+import { listTaskDependencyNodeIds } from "./listTaskDependencyNodeIds.js";
 import { listTaskNodeIds } from "./listTaskNodeIds.js";
+import { listTaskStateEdgeIds } from "./listTaskStateEdgeIds.js";
+import { listTaskToDataInjectionEdgeIds } from "./listTaskToDataInjectionEdgeIds.js";
+import { listTaskToTaskInjectionEdgeIds } from "./listTaskToTaskInjectionEdgeIds.js";
 import { listWaitForDataIds } from "./listWaitForDataIds.js";
 import { listWaitForTaskIds } from "./listWaitForTaskIds.js";
 import { readAfterStartValues } from "./readAfterStartValues.js";
@@ -154,9 +164,8 @@ import { readDataStateEdgeId } from "./readDataStateEdgeId.js";
 import { readDataStateStatus } from "./readDataStateStatus.js";
 import { readDataTargets } from "./readDataTargets.js";
 import { readDataTaskDeps } from "./readDataTaskDeps.js";
-import { readDependencyStateResult } from "./readDependencyStateResult.js";
 import { readDepValues } from "./readDepValues.js";
-import { readGatedComponentValues } from "./readGatedComponentValues.js";
+import { readDependencyStateResult } from "./readDependencyStateResult.js";
 import { readGateInstanceId } from "./readGateInstanceId.js";
 import { readGateInstanceRefs } from "./readGateInstanceRefs.js";
 import { readGateInstanceValues } from "./readGateInstanceValues.js";
@@ -165,13 +174,14 @@ import { readGateRefAliasAndFunction } from "./readGateRefAliasAndFunction.js";
 import { readGateRefAliasAndName } from "./readGateRefAliasAndName.js";
 import { readGateStateMachineId } from "./readGateStateMachineId.js";
 import { readGateValues } from "./readGateValues.js";
+import { readGatedComponentValues } from "./readGatedComponentValues.js";
 import { readIdentifierValues } from "./readIdentifierValues.js";
-import { readImportedComponentValues } from "./readImportedComponentValues.js";
-import { readImportedInstanceIdForRef } from "./readImportedInstanceIdForRef.js";
 import { readImportInstanceId } from "./readImportInstanceId.js";
 import { readImportRefAlias } from "./readImportRefAlias.js";
 import { readImportRefValues } from "./readImportRefValues.js";
 import { readImportStateMachineId } from "./readImportStateMachineId.js";
+import { readImportedComponentValues } from "./readImportedComponentValues.js";
+import { readImportedInstanceIdForRef } from "./readImportedInstanceIdForRef.js";
 import { readInitialState } from "./readInitialState.js";
 import { readInitialValues } from "./readInitialValues.js";
 import { readInstanceIdValues } from "./readInstanceIdValues.js";
@@ -194,9 +204,9 @@ import { readStateMachineId } from "./readStateMachineId.js";
 import { readStateMachineState } from "./readStateMachineState.js";
 import { readStateMachineStateAndUpdatedAt } from "./readStateMachineStateAndUpdatedAt.js";
 import { readStateMachineStateByInstanceId } from "./readStateMachineStateByInstanceId.js";
+import { readStateMachineStatusMaps } from "./readStateMachineStatusMaps.js";
 import { readStateMachineTaskIds } from "./readStateMachineTaskIds.js";
 import { readStateMachineVertexId } from "./readStateMachineVertexId.js";
-import { readStatusMaps } from "./readStatusMaps.js";
 import { readTargetDataTaskTargets } from "./readTargetDataTaskTargets.js";
 import { readTargetEdgeValues } from "./readTargetEdgeValues.js";
 import { readTargetInstanceMap } from "./readTargetInstanceMap.js";
@@ -215,223 +225,233 @@ import { readTaskStateStatus } from "./readTaskStateStatus.js";
 import { readTaskTargets } from "./readTaskTargets.js";
 import { readValues } from "./readValues.js";
 
-export function query({ g, domain }) {
+export function query({ g }) {
   return {
-    findBootstrapTaskId: findBootstrapTaskId({ g, domain }),
-    findComponentAgentVertexId: findComponentAgentVertexId({ g, domain }),
-    findComponentIdByHash: findComponentIdByHash({ g, domain }),
-    findComponentIdForData: findComponentIdForData({ g, domain }),
-    findComponentIdForDeferred: findComponentIdForDeferred({ g, domain }),
-    findComponentIdForInstance: findComponentIdForInstance({ g, domain }),
-    findComponentIdForTask: findComponentIdForTask({ g, domain }),
-    findComponentInstanceVertexId: findComponentInstanceVertexId({ g, domain }),
-    findComponentNodeIdByName: findComponentNodeIdByName({ g, domain }),
-    findComponentVertexId: findComponentVertexId({ g, domain }),
-    findData1Id: findData1Id({ g, domain }),
-    findDataId: findDataId({ g, domain }),
-    findDataOneId: findDataOneId({ g, domain }),
-    findDataStateEdgeIdByName: findDataStateEdgeIdByName({ g, domain }),
-    findDataTwoId: findDataTwoId({ g, domain }),
-    findDataVertexId: findDataVertexId({ g, domain }),
-    findDeferredId: findDeferredId({ g, domain }),
-    findDependencyTargetNodeId: findDependencyTargetNodeId({ g, domain }),
-    findDependentComponentId: findDependentComponentId({ g, domain }),
-    findEdgeId: findEdgeId({ g, domain }),
-    findEdgeTargetNodeId: findEdgeTargetNodeId({ g, domain }),
-    findFirstComponentId: findFirstComponentId({ g, domain }),
-    findFirstInitId: findFirstInitId({ g, domain }),
-    findGatedComponentIdByHash: findGatedComponentIdByHash({ g, domain }),
-    findGatedComponentIdForGateRef: findGatedComponentIdForGateRef({ g, domain }),
-    findGatedInstanceComponentId: findGatedInstanceComponentId({ g, domain }),
-    findGatedInstanceVertexIdByAlias: findGatedInstanceVertexIdByAlias({ g, domain }),
-    findGatedInstanceVertexIdForRef: findGatedInstanceVertexIdForRef({ g, domain }),
-    findGateInstanceRefIdByAlias: findGateInstanceRefIdByAlias({ g, domain }),
-    findGateInstanceRefIdForInstance: findGateInstanceRefIdForInstance({ g, domain }),
-    findGateInstanceVertexIdByAlias: findGateInstanceVertexIdByAlias({ g, domain }),
-    findGateInstanceVertexIdForRef: findGateInstanceVertexIdForRef({ g, domain }),
-    findGateRefIdByAlias: findGateRefIdByAlias({ g, domain }),
-    findGateRefIdForInstanceRef: findGateRefIdForInstanceRef({ g, domain }),
-    findHasDataStateStateMachineData: findHasDataStateStateMachineData({ g, domain }),
-    findHasDependencyDataData: findHasDependencyDataData({ g, domain }),
-    findHasDependencyDataDeferred: findHasDependencyDataDeferred({ g, domain }),
-    findHasDependencyGateRefData: findHasDependencyGateRefData({ g, domain }),
-    findHasDependencyGateRefTask: findHasDependencyGateRefTask({ g, domain }),
-    findHasDependencyTaskData: findHasDependencyTaskData({ g, domain }),
-    findHasDependencyTaskDeferred: findHasDependencyTaskDeferred({ g, domain }),
-    findHasDependencyTaskTask: findHasDependencyTaskTask({ g, domain }),
-    findHasTaskStateStateMachineTask: findHasTaskStateStateMachineTask({ g, domain }),
-    findImportedComponentIdByHash: findImportedComponentIdByHash({ g, domain }),
-    findImportedComponentIdForImportRef: findImportedComponentIdForImportRef({ g, domain }),
-    findImportedInstanceVertexIdByAlias: findImportedInstanceVertexIdByAlias({ g, domain }),
-    findImportedInstanceVertexIdForRef: findImportedInstanceVertexIdForRef({ g, domain }),
-    findImportInjectionTargetNodeId: findImportInjectionTargetNodeId({ g, domain }),
-    findImportInstanceRefIdByAlias: findImportInstanceRefIdByAlias({ g, domain }),
-    findImportInstanceRefIdForInstance: findImportInstanceRefIdForInstance({ g, domain }),
-    findImportInstanceVertexId: findImportInstanceVertexId({ g, domain }),
-    findImportRefIdByAlias: findImportRefIdByAlias({ g, domain }),
-    findImportRefIdForInstanceRef: findImportRefIdForInstanceRef({ g, domain }),
-    findImportRefLookupId: findImportRefLookupId({ g, domain }),
-    findInjectsIntoDataTask: findInjectsIntoDataTask({ g, domain }),
-    findInjectsIntoTaskData: findInjectsIntoTaskData({ g, domain }),
-    findInstanceVertexId: findInstanceVertexId({ g, domain }),
-    findLeafComponentId: findLeafComponentId({ g, domain }),
-    findLinkedGateRefId: findLinkedGateRefId({ g, domain }),
-    findMainTaskId: findMainTaskId({ g, domain }),
-    findNestedImportRefId: findNestedImportRefId({ g, domain }),
-    findNestedInstanceVertexId: findNestedInstanceVertexId({ g, domain }),
-    findNextInstanceVertexId: findNextInstanceVertexId({ g, domain }),
-    findOwningComponentId: findOwningComponentId({ g, domain }),
-    findOwningGateInstanceRefId: findOwningGateInstanceRefId({ g, domain }),
-    findParentGateId: findParentGateId({ g, domain }),
-    findParentId: findParentId({ g, domain }),
-    findParentImportId: findParentImportId({ g, domain }),
-    findParentInstanceVertexId: findParentInstanceVertexId({ g, domain }),
-    findProvidedComponentId: findProvidedComponentId({ g, domain }),
-    findProviderComponentId: findProviderComponentId({ g, domain }),
-    findProviderDataId: findProviderDataId({ g, domain }),
-    findProviderTaskId: findProviderTaskId({ g, domain }),
-    findRootDataId: findRootDataId({ g, domain }),
-    findRootInstanceVertexId: findRootInstanceVertexId({ g, domain }),
-    findSharedComponentId: findSharedComponentId({ g, domain }),
-    findStateEdgeIdByTypeAndName: findStateEdgeIdByTypeAndName({ g, domain }),
-    findStateEdgeIdForTargetNode: findStateEdgeIdForTargetNode({ g, domain }),
-    findStateEdgeTargetNodeId: findStateEdgeTargetNodeId({ g, domain }),
-    findTargetComponentId: findTargetComponentId({ g, domain }),
-    findTargetDataId: findTargetDataId({ g, domain }),
-    findTargetTaskId: findTargetTaskId({ g, domain }),
-    findTask1Id: findTask1Id({ g, domain }),
-    findTask2Id: findTask2Id({ g, domain }),
-    findTaskAId: findTaskAId({ g, domain }),
-    findTaskBId: findTaskBId({ g, domain }),
-    findTaskNodeId: findTaskNodeId({ g, domain }),
-    findTaskStateEdgeIdByName: findTaskStateEdgeIdByName({ g, domain }),
-    findUsesGateGateInstanceRefComponentInstance: findUsesGateGateInstanceRefComponentInstance({ g, domain }),
-    findUsesImportImportInstanceRefComponentInstance: findUsesImportImportInstanceRefComponentInstance({ g, domain }),
-    findWordsComponentId: findWordsComponentId({ g, domain }),
-    findWordsProcessId: findWordsProcessId({ g, domain }),
-    findWordsVocabId: findWordsVocabId({ g, domain }),
-    listAgentFnIds: listAgentFnIds({ g, domain }),
-    listComponentDataIds: listComponentDataIds({ g, domain }),
-    listComponentIds: listComponentIds({ g, domain }),
-    listComponentTaskIds: listComponentTaskIds({ g, domain }),
-    listDataNodeIds: listDataNodeIds({ g, domain }),
-    listDataStateEdgeIds: listDataStateEdgeIds({ g, domain }),
-    listDependencyNodeIds: listDependencyNodeIds({ g, domain }),
-    listDependentDataNodeIds: listDependentDataNodeIds({ g, domain }),
-    listDependentTaskNodeIds: listDependentTaskNodeIds({ g, domain }),
-    listDepsDataIds: listDepsDataIds({ g, domain }),
-    listDepsTaskIds: listDepsTaskIds({ g, domain }),
-    listDepTaskIds: listDepTaskIds({ g, domain }),
-    listGateDataWaitForIds: listGateDataWaitForIds({ g, domain }),
-    listGatedInstanceIds: listGatedInstanceIds({ g, domain }),
-    listGateInstanceRefIds: listGateInstanceRefIds({ g, domain }),
-    listGateParentInstanceVertexIds: listGateParentInstanceVertexIds({ g, domain }),
-    listGateRefIds: listGateRefIds({ g, domain }),
-    listGateRefInstanceIds: listGateRefInstanceIds({ g, domain }),
-    listGateTaskWaitForIds: listGateTaskWaitForIds({ g, domain }),
-    listImportDataWaitForIds: listImportDataWaitForIds({ g, domain }),
-    listImportedComponentIds: listImportedComponentIds({ g, domain }),
-    listImportedInstanceIds: listImportedInstanceIds({ g, domain }),
-    listImportInstanceRefIds: listImportInstanceRefIds({ g, domain }),
-    listImportInstanceVertexIds: listImportInstanceVertexIds({ g, domain }),
-    listImportParentInstanceVertexIds: listImportParentInstanceVertexIds({ g, domain }),
-    listImportRefIds: listImportRefIds({ g, domain }),
-    listImportRefInstanceIds: listImportRefInstanceIds({ g, domain }),
-    listImportTaskWaitForIds: listImportTaskWaitForIds({ g, domain }),
-    listInstanceOfIds: listInstanceOfIds({ g, domain }),
-    listMidImportInstanceRefIds: listMidImportInstanceRefIds({ g, domain }),
-    listMidInstanceIds: listMidInstanceIds({ g, domain }),
-    listNestedComponentIds: listNestedComponentIds({ g, domain }),
-    listParentGateInstanceIds: listParentGateInstanceIds({ g, domain }),
-    listParentInstanceIds: listParentInstanceIds({ g, domain }),
-    listStateEdgeIds: listStateEdgeIds({ g, domain }),
-    listTargetEdgeIds: listTargetEdgeIds({ g, domain }),
-    listTaskNodeIds: listTaskNodeIds({ g, domain }),
-    listWaitForDataIds: listWaitForDataIds({ g, domain }),
-    listWaitForTaskIds: listWaitForTaskIds({ g, domain }),
-    readAfterStartValues: readAfterStartValues({ g, domain }),
-    readAgentFnValues: readAgentFnValues({ g, domain }),
-    readBeforeStartValues: readBeforeStartValues({ g, domain }),
-    readBlockedGateState: readBlockedGateState({ g, domain }),
-    readChildInstanceIdValues: readChildInstanceIdValues({ g, domain }),
-    readChildState: readChildState({ g, domain }),
-    readChildStateMachineId: readChildStateMachineId({ g, domain }),
-    readCompletedState: readCompletedState({ g, domain }),
-    readComponentData: readComponentData({ g, domain }),
-    readComponentDeferred: readComponentDeferred({ g, domain }),
-    readComponentHash: readComponentHash({ g, domain }),
-    readComponentInstanceId: readComponentInstanceId({ g, domain }),
-    readComponentRow: readComponentRow({ g, domain }),
-    readComponentRows: readComponentRows({ g, domain }),
-    readComponentTasks: readComponentTasks({ g, domain }),
-    readComponentValues: readComponentValues({ g, domain }),
-    readDataDeps: readDataDeps({ g, domain }),
-    readDataOneDataInjects: readDataOneDataInjects({ g, domain }),
-    readDataOneTaskInjects: readDataOneTaskInjects({ g, domain }),
-    readDataRow: readDataRow({ g, domain }),
-    readDataStateEdgeId: readDataStateEdgeId({ g, domain }),
-    readDataStateStatus: readDataStateStatus({ g, domain }),
-    readDataTargets: readDataTargets({ g, domain }),
-    readDataTaskDeps: readDataTaskDeps({ g, domain }),
-    readDependencyStateResult: readDependencyStateResult({ g, domain }),
-    readDepValues: readDepValues({ g, domain }),
-    readGatedComponentValues: readGatedComponentValues({ g, domain }),
-    readGateInstanceId: readGateInstanceId({ g, domain }),
-    readGateInstanceRefs: readGateInstanceRefs({ g, domain }),
-    readGateInstanceValues: readGateInstanceValues({ g, domain }),
-    readGateRefAlias: readGateRefAlias({ g, domain }),
-    readGateRefAliasAndFunction: readGateRefAliasAndFunction({ g, domain }),
-    readGateRefAliasAndName: readGateRefAliasAndName({ g, domain }),
-    readGateStateMachineId: readGateStateMachineId({ g, domain }),
-    readGateValues: readGateValues({ g, domain }),
-    readIdentifierValues: readIdentifierValues({ g, domain }),
-    readImportedComponentValues: readImportedComponentValues({ g, domain }),
-    readImportedInstanceIdForRef: readImportedInstanceIdForRef({ g, domain }),
-    readImportInstanceId: readImportInstanceId({ g, domain }),
-    readImportRefAlias: readImportRefAlias({ g, domain }),
-    readImportRefValues: readImportRefValues({ g, domain }),
-    readImportStateMachineId: readImportStateMachineId({ g, domain }),
-    readInitialState: readInitialState({ g, domain }),
-    readInitialValues: readInitialValues({ g, domain }),
-    readInstanceIdValues: readInstanceIdValues({ g, domain }),
-    readLifecycleWaitForValues: readLifecycleWaitForValues({ g, domain }),
-    readNestedAliasRow: readNestedAliasRow({ g, domain }),
-    readNext: readNext({ g, domain }),
-    readNodeName: readNodeName({ g, domain }),
-    readParentInstanceId: readParentInstanceId({ g, domain }),
-    readParentInstanceIdMap: readParentInstanceIdMap({ g, domain }),
-    readParentStateMachineId: readParentStateMachineId({ g, domain }),
-    readProviderInstanceValues: readProviderInstanceValues({ g, domain }),
-    readResultValues: readResultValues({ g, domain }),
-    readRunningState: readRunningState({ g, domain }),
-    readStateEdgeStatus: readStateEdgeStatus({ g, domain }),
-    readStateEdgeStatusAndResult: readStateEdgeStatusAndResult({ g, domain }),
-    readStateEdgeStatusResultAndUpdatedAt: readStateEdgeStatusResultAndUpdatedAt({ g, domain }),
-    readStateEdgeTargetName: readStateEdgeTargetName({ g, domain }),
-    readStateMachineDataIds: readStateMachineDataIds({ g, domain }),
-    readStateMachineId: readStateMachineId({ g, domain }),
-    readStateMachineState: readStateMachineState({ g, domain }),
-    readStateMachineStateAndUpdatedAt: readStateMachineStateAndUpdatedAt({ g, domain }),
-    readStateMachineStateByInstanceId: readStateMachineStateByInstanceId({ g, domain }),
-    readStateMachineTaskIds: readStateMachineTaskIds({ g, domain }),
-    readStateMachineVertexId: readStateMachineVertexId({ g, domain }),
-    readStatusMaps: readStatusMaps({ g, domain }),
-    readTargetDataTaskTargets: readTargetDataTaskTargets({ g, domain }),
-    readTargetEdgeValues: readTargetEdgeValues({ g, domain }),
-    readTargetInstanceMap: readTargetInstanceMap({ g, domain }),
-    readTargetInstanceValues: readTargetInstanceValues({ g, domain }),
-    readTargetStateMachineId: readTargetStateMachineId({ g, domain }),
-    readTargetTaskDataTargets: readTargetTaskDataTargets({ g, domain }),
-    readTask1DataDeps: readTask1DataDeps({ g, domain }),
-    readTask1DeferredDeps: readTask1DeferredDeps({ g, domain }),
-    readTaskADataInjects: readTaskADataInjects({ g, domain }),
-    readTaskATaskInjects: readTaskATaskInjects({ g, domain }),
-    readTaskDeps: readTaskDeps({ g, domain }),
-    readTaskRow: readTaskRow({ g, domain }),
-    readTaskRows: readTaskRows({ g, domain }),
-    readTaskStateEdgeId: readTaskStateEdgeId({ g, domain }),
-    readTaskStateStatus: readTaskStateStatus({ g, domain }),
-    readTaskTargets: readTaskTargets({ g, domain }),
-    readValues: readValues({ g, domain }),
+    findBootstrapTaskId: findBootstrapTaskId({ g }),
+    findComponentAgentVertexId: findComponentAgentVertexId({ g }),
+    findComponentDataNodeIdByName: findComponentDataNodeIdByName({ g }),
+    findComponentIdByHash: findComponentIdByHash({ g }),
+    findComponentIdForData: findComponentIdForData({ g }),
+    findComponentIdForDeferred: findComponentIdForDeferred({ g }),
+    findComponentIdForInstance: findComponentIdForInstance({ g }),
+    findComponentIdForTask: findComponentIdForTask({ g }),
+    findComponentInstanceVertexId: findComponentInstanceVertexId({ g }),
+    findComponentTaskNodeIdByName: findComponentTaskNodeIdByName({ g }),
+    findComponentVertexId: findComponentVertexId({ g }),
+    findData1Id: findData1Id({ g }),
+    findDataId: findDataId({ g }),
+    findDataOneId: findDataOneId({ g }),
+    findDataStateEdgeIdByName: findDataStateEdgeIdByName({ g }),
+    findDataStateEdgeIdForTargetNode: findDataStateEdgeIdForTargetNode({ g }),
+    findDataStateEdgeTargetNodeId: findDataStateEdgeTargetNodeId({ g }),
+    findDataTwoId: findDataTwoId({ g }),
+    findDataVertexId: findDataVertexId({ g }),
+    findDeferredId: findDeferredId({ g }),
+    findDependencyDataTargetNodeIdByName: findDependencyDataTargetNodeIdByName({ g }),
+    findDependencyDeferredTargetNodeIdByName: findDependencyDeferredTargetNodeIdByName({ g }),
+    findDependencyTaskTargetNodeIdByName: findDependencyTaskTargetNodeIdByName({ g }),
+    findDependentComponentId: findDependentComponentId({ g }),
+    findEdgeTargetNodeId: findEdgeTargetNodeId({ g }),
+    findFirstComponentId: findFirstComponentId({ g }),
+    findFirstInitId: findFirstInitId({ g }),
+    findGateInstanceRefIdByAlias: findGateInstanceRefIdByAlias({ g }),
+    findGateInstanceRefIdForInstance: findGateInstanceRefIdForInstance({ g }),
+    findGateInstanceVertexIdByAlias: findGateInstanceVertexIdByAlias({ g }),
+    findGateInstanceVertexIdForRef: findGateInstanceVertexIdForRef({ g }),
+    findGateRefIdByAlias: findGateRefIdByAlias({ g }),
+    findGateRefIdForInstanceRef: findGateRefIdForInstanceRef({ g }),
+    findGatedComponentIdByHash: findGatedComponentIdByHash({ g }),
+    findGatedComponentIdForGateRef: findGatedComponentIdForGateRef({ g }),
+    findGatedInstanceComponentId: findGatedInstanceComponentId({ g }),
+    findGatedInstanceVertexIdByAlias: findGatedInstanceVertexIdByAlias({ g }),
+    findGatedInstanceVertexIdForRef: findGatedInstanceVertexIdForRef({ g }),
+    findHasDataStateStateMachineData: findHasDataStateStateMachineData({ g }),
+    findHasDependencyDataData: findHasDependencyDataData({ g }),
+    findHasDependencyDataDeferred: findHasDependencyDataDeferred({ g }),
+    findHasDependencyGateRefData: findHasDependencyGateRefData({ g }),
+    findHasDependencyGateRefTask: findHasDependencyGateRefTask({ g }),
+    findHasDependencyTaskData: findHasDependencyTaskData({ g }),
+    findHasDependencyTaskDeferred: findHasDependencyTaskDeferred({ g }),
+    findHasDependencyTaskTask: findHasDependencyTaskTask({ g }),
+    findHasTaskStateStateMachineTask: findHasTaskStateStateMachineTask({ g }),
+    findImportInjectionDataTargetNodeIdByName: findImportInjectionDataTargetNodeIdByName({ g }),
+    findImportInjectionTaskTargetNodeIdByName: findImportInjectionTaskTargetNodeIdByName({ g }),
+    findImportInstanceRefIdByAlias: findImportInstanceRefIdByAlias({ g }),
+    findImportInstanceRefIdForInstance: findImportInstanceRefIdForInstance({ g }),
+    findImportInstanceVertexId: findImportInstanceVertexId({ g }),
+    findImportRefIdByAlias: findImportRefIdByAlias({ g }),
+    findImportRefIdForInstanceRef: findImportRefIdForInstanceRef({ g }),
+    findImportRefLookupId: findImportRefLookupId({ g }),
+    findImportedComponentIdByHash: findImportedComponentIdByHash({ g }),
+    findImportedComponentIdForImportRef: findImportedComponentIdForImportRef({ g }),
+    findImportedInstanceVertexIdByAlias: findImportedInstanceVertexIdByAlias({ g }),
+    findImportedInstanceVertexIdForRef: findImportedInstanceVertexIdForRef({ g }),
+    findInjectsIntoDataTask: findInjectsIntoDataTask({ g }),
+    findInjectsIntoTaskData: findInjectsIntoTaskData({ g }),
+    findInstanceVertexId: findInstanceVertexId({ g }),
+    findLeafComponentId: findLeafComponentId({ g }),
+    findLinkedGateRefId: findLinkedGateRefId({ g }),
+    findMainTaskId: findMainTaskId({ g }),
+    findNestedImportRefId: findNestedImportRefId({ g }),
+    findNestedInstanceVertexId: findNestedInstanceVertexId({ g }),
+    findOwningGateInstanceRefId: findOwningGateInstanceRefId({ g }),
+    findParentGateId: findParentGateId({ g }),
+    findParentId: findParentId({ g }),
+    findParentImportId: findParentImportId({ g }),
+    findParentInstanceVertexId: findParentInstanceVertexId({ g }),
+    findProvidedComponentId: findProvidedComponentId({ g }),
+    findProviderComponentId: findProviderComponentId({ g }),
+    findProviderDataId: findProviderDataId({ g }),
+    findProviderTaskId: findProviderTaskId({ g }),
+    findRootDataId: findRootDataId({ g }),
+    findRootInstanceVertexId: findRootInstanceVertexId({ g }),
+    findSharedComponentId: findSharedComponentId({ g }),
+    findTargetComponentId: findTargetComponentId({ g }),
+    findTargetDataId: findTargetDataId({ g }),
+    findTargetTaskId: findTargetTaskId({ g }),
+    findTask1Id: findTask1Id({ g }),
+    findTask2Id: findTask2Id({ g }),
+    findTaskAId: findTaskAId({ g }),
+    findTaskBId: findTaskBId({ g }),
+    findTaskNodeId: findTaskNodeId({ g }),
+    findTaskStateEdgeIdByName: findTaskStateEdgeIdByName({ g }),
+    findTaskStateEdgeIdForTargetNode: findTaskStateEdgeIdForTargetNode({ g }),
+    findTaskStateEdgeTargetNodeId: findTaskStateEdgeTargetNodeId({ g }),
+    findUsesGateGateInstanceRefComponentInstance: findUsesGateGateInstanceRefComponentInstance({ g }),
+    findUsesImportImportInstanceRefComponentInstance: findUsesImportImportInstanceRefComponentInstance({ g }),
+    findWordsComponentId: findWordsComponentId({ g }),
+    findWordsProcessId: findWordsProcessId({ g }),
+    findWordsVocabId: findWordsVocabId({ g }),
+    listComponentAgentFnIds: listComponentAgentFnIds({ g }),
+    listComponentDataIds: listComponentDataIds({ g }),
+    listComponentIds: listComponentIds({ g }),
+    listComponentTaskIds: listComponentTaskIds({ g }),
+    listDataDependencyAndWaitForNodeIds: listDataDependencyAndWaitForNodeIds({ g }),
+    listDataDependencyNodeIds: listDataDependencyNodeIds({ g }),
+    listDataNodeIds: listDataNodeIds({ g }),
+    listDataStateEdgeIds: listDataStateEdgeIds({ g }),
+    listDataToDataInjectionEdgeIds: listDataToDataInjectionEdgeIds({ g }),
+    listDataToTaskInjectionEdgeIds: listDataToTaskInjectionEdgeIds({ g }),
+    listDepTaskIds: listDepTaskIds({ g }),
+    listDependentDataNodeIdsForData: listDependentDataNodeIdsForData({ g }),
+    listDependentDataNodeIdsForTask: listDependentDataNodeIdsForTask({ g }),
+    listDependentTaskNodeIdsForData: listDependentTaskNodeIdsForData({ g }),
+    listDependentTaskNodeIdsForTask: listDependentTaskNodeIdsForTask({ g }),
+    listDepsDataIds: listDepsDataIds({ g }),
+    listDepsTaskIds: listDepsTaskIds({ g }),
+    listGateDataWaitForIds: listGateDataWaitForIds({ g }),
+    listGateInstanceRefIds: listGateInstanceRefIds({ g }),
+    listGateParentInstanceVertexIds: listGateParentInstanceVertexIds({ g }),
+    listGateRefIds: listGateRefIds({ g }),
+    listGateRefInstanceIds: listGateRefInstanceIds({ g }),
+    listGateTaskWaitForIds: listGateTaskWaitForIds({ g }),
+    listGatedInstanceIds: listGatedInstanceIds({ g }),
+    listImportDataWaitForIds: listImportDataWaitForIds({ g }),
+    listImportInstanceRefIds: listImportInstanceRefIds({ g }),
+    listImportInstanceVertexIds: listImportInstanceVertexIds({ g }),
+    listImportParentInstanceVertexIds: listImportParentInstanceVertexIds({ g }),
+    listImportRefIds: listImportRefIds({ g }),
+    listImportRefInstanceIds: listImportRefInstanceIds({ g }),
+    listImportTaskWaitForIds: listImportTaskWaitForIds({ g }),
+    listImportedComponentIds: listImportedComponentIds({ g }),
+    listImportedInstanceIds: listImportedInstanceIds({ g }),
+    listInstanceOfIds: listInstanceOfIds({ g }),
+    listMidImportInstanceRefIds: listMidImportInstanceRefIds({ g }),
+    listMidInstanceIds: listMidInstanceIds({ g }),
+    listNestedComponentIds: listNestedComponentIds({ g }),
+    listParentGateInstanceIds: listParentGateInstanceIds({ g }),
+    listParentInstanceIds: listParentInstanceIds({ g }),
+    listTaskDependencyAndWaitForNodeIds: listTaskDependencyAndWaitForNodeIds({ g }),
+    listTaskDependencyNodeIds: listTaskDependencyNodeIds({ g }),
+    listTaskNodeIds: listTaskNodeIds({ g }),
+    listTaskStateEdgeIds: listTaskStateEdgeIds({ g }),
+    listTaskToDataInjectionEdgeIds: listTaskToDataInjectionEdgeIds({ g }),
+    listTaskToTaskInjectionEdgeIds: listTaskToTaskInjectionEdgeIds({ g }),
+    listWaitForDataIds: listWaitForDataIds({ g }),
+    listWaitForTaskIds: listWaitForTaskIds({ g }),
+    readAfterStartValues: readAfterStartValues({ g }),
+    readAgentFnValues: readAgentFnValues({ g }),
+    readBeforeStartValues: readBeforeStartValues({ g }),
+    readBlockedGateState: readBlockedGateState({ g }),
+    readChildInstanceIdValues: readChildInstanceIdValues({ g }),
+    readChildState: readChildState({ g }),
+    readChildStateMachineId: readChildStateMachineId({ g }),
+    readCompletedState: readCompletedState({ g }),
+    readComponentData: readComponentData({ g }),
+    readComponentDeferred: readComponentDeferred({ g }),
+    readComponentHash: readComponentHash({ g }),
+    readComponentInstanceId: readComponentInstanceId({ g }),
+    readComponentRow: readComponentRow({ g }),
+    readComponentRows: readComponentRows({ g }),
+    readComponentTasks: readComponentTasks({ g }),
+    readComponentValues: readComponentValues({ g }),
+    readDataDeps: readDataDeps({ g }),
+    readDataOneDataInjects: readDataOneDataInjects({ g }),
+    readDataOneTaskInjects: readDataOneTaskInjects({ g }),
+    readDataRow: readDataRow({ g }),
+    readDataStateEdgeId: readDataStateEdgeId({ g }),
+    readDataStateStatus: readDataStateStatus({ g }),
+    readDataTargets: readDataTargets({ g }),
+    readDataTaskDeps: readDataTaskDeps({ g }),
+    readDepValues: readDepValues({ g }),
+    readDependencyStateResult: readDependencyStateResult({ g }),
+    readGateInstanceId: readGateInstanceId({ g }),
+    readGateInstanceRefs: readGateInstanceRefs({ g }),
+    readGateInstanceValues: readGateInstanceValues({ g }),
+    readGateRefAlias: readGateRefAlias({ g }),
+    readGateRefAliasAndFunction: readGateRefAliasAndFunction({ g }),
+    readGateRefAliasAndName: readGateRefAliasAndName({ g }),
+    readGateStateMachineId: readGateStateMachineId({ g }),
+    readGateValues: readGateValues({ g }),
+    readGatedComponentValues: readGatedComponentValues({ g }),
+    readIdentifierValues: readIdentifierValues({ g }),
+    readImportInstanceId: readImportInstanceId({ g }),
+    readImportRefAlias: readImportRefAlias({ g }),
+    readImportRefValues: readImportRefValues({ g }),
+    readImportStateMachineId: readImportStateMachineId({ g }),
+    readImportedComponentValues: readImportedComponentValues({ g }),
+    readImportedInstanceIdForRef: readImportedInstanceIdForRef({ g }),
+    readInitialState: readInitialState({ g }),
+    readInitialValues: readInitialValues({ g }),
+    readInstanceIdValues: readInstanceIdValues({ g }),
+    readLifecycleWaitForValues: readLifecycleWaitForValues({ g }),
+    readNestedAliasRow: readNestedAliasRow({ g }),
+    readNext: readNext({ g }),
+    readNodeName: readNodeName({ g }),
+    readParentInstanceId: readParentInstanceId({ g }),
+    readParentInstanceIdMap: readParentInstanceIdMap({ g }),
+    readParentStateMachineId: readParentStateMachineId({ g }),
+    readProviderInstanceValues: readProviderInstanceValues({ g }),
+    readResultValues: readResultValues({ g }),
+    readRunningState: readRunningState({ g }),
+    readStateEdgeStatus: readStateEdgeStatus({ g }),
+    readStateEdgeStatusAndResult: readStateEdgeStatusAndResult({ g }),
+    readStateEdgeStatusResultAndUpdatedAt: readStateEdgeStatusResultAndUpdatedAt({ g }),
+    readStateEdgeTargetName: readStateEdgeTargetName({ g }),
+    readStateMachineDataIds: readStateMachineDataIds({ g }),
+    readStateMachineId: readStateMachineId({ g }),
+    readStateMachineState: readStateMachineState({ g }),
+    readStateMachineStateAndUpdatedAt: readStateMachineStateAndUpdatedAt({ g }),
+    readStateMachineStateByInstanceId: readStateMachineStateByInstanceId({ g }),
+    readStateMachineStatusMaps: readStateMachineStatusMaps({ g }),
+    readStateMachineTaskIds: readStateMachineTaskIds({ g }),
+    readStateMachineVertexId: readStateMachineVertexId({ g }),
+    readTargetDataTaskTargets: readTargetDataTaskTargets({ g }),
+    readTargetEdgeValues: readTargetEdgeValues({ g }),
+    readTargetInstanceMap: readTargetInstanceMap({ g }),
+    readTargetInstanceValues: readTargetInstanceValues({ g }),
+    readTargetStateMachineId: readTargetStateMachineId({ g }),
+    readTargetTaskDataTargets: readTargetTaskDataTargets({ g }),
+    readTask1DataDeps: readTask1DataDeps({ g }),
+    readTask1DeferredDeps: readTask1DeferredDeps({ g }),
+    readTaskADataInjects: readTaskADataInjects({ g }),
+    readTaskATaskInjects: readTaskATaskInjects({ g }),
+    readTaskDeps: readTaskDeps({ g }),
+    readTaskRow: readTaskRow({ g }),
+    readTaskRows: readTaskRows({ g }),
+    readTaskStateEdgeId: readTaskStateEdgeId({ g }),
+    readTaskStateStatus: readTaskStateStatus({ g }),
+    readTaskTargets: readTaskTargets({ g }),
+    readValues: readValues({ g }),
   };
 }

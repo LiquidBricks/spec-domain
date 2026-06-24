@@ -1,3 +1,5 @@
-export function readBeforeStartValues({ g, domain }) {
-  return ({ edgeId }) => g.E(edgeId).valueMap('status', 'result');
+export function readBeforeStartValues({ g }) {
+  return ({ edgeId }) => g
+    .E(edgeId)
+    .valueMap('status', 'result');
 }

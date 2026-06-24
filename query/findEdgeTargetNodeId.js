@@ -1,3 +1,6 @@
-export function findEdgeTargetNodeId({ g, domain }) {
-  return ({ edgeId }) => g.E(edgeId).inV().id();
+export function findEdgeTargetNodeId({ g }) {
+  return ({ edgeId }) => g
+    .E(edgeId)
+    .inV()
+    .id();
 }

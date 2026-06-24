@@ -1,3 +1,5 @@
-export function readDataRow({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('name');
+export function readDataRow({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('name');
 }

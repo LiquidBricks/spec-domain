@@ -14,17 +14,46 @@ function operationNames(kind) {
     .sort()
 }
 
-test('dataMapper exposes every concrete query and mutation implementation', () => {
+function readSpecFile(relativePath) {
+  return fs.readFileSync(path.join(specRoot, relativePath), 'utf8')
+}
+
+function mapperPath(root, segments) {
+  return segments.reduce((current, segment) => current?.[segment], root)
+}
+
+const concreteMutations = [
+  { path: ['vertex', 'stateMachine', 'setRunning'], file: 'vertex/stateMachine/index.js' },
+  { path: ['vertex', 'stateMachine', 'setComplete'], file: 'vertex/stateMachine/index.js' },
+  { path: ['vertex', 'importRef', 'setLifecycleWaitFor'], file: 'vertex/importRef/index.js' },
+  { path: ['vertex', 'gateInstanceRef', 'setResultAndUpdatedAt'], file: 'vertex/gateInstanceRef/index.js' },
+  { path: ['edge', 'has_data_state', 'stateMachine_data', 'setRunning'], file: 'edge/has_data_state/stateMachine_data/index.js' },
+  { path: ['edge', 'has_data_state', 'stateMachine_data', 'setStatus'], file: 'edge/has_data_state/stateMachine_data/index.js' },
+  { path: ['edge', 'has_data_state', 'stateMachine_data', 'setStatusAndResult'], file: 'edge/has_data_state/stateMachine_data/index.js' },
+  { path: ['edge', 'has_data_state', 'stateMachine_data', 'updateResultStatusUpdatedAt'], file: 'edge/has_data_state/stateMachine_data/index.js' },
+  { path: ['edge', 'has_task_state', 'stateMachine_task', 'setRunning'], file: 'edge/has_task_state/stateMachine_task/index.js' },
+  { path: ['edge', 'has_task_state', 'stateMachine_task', 'setStatus'], file: 'edge/has_task_state/stateMachine_task/index.js' },
+  { path: ['edge', 'has_task_state', 'stateMachine_task', 'setStatusAndResult'], file: 'edge/has_task_state/stateMachine_task/index.js' },
+  { path: ['edge', 'has_task_state', 'stateMachine_task', 'updateResultStatusUpdatedAt'], file: 'edge/has_task_state/stateMachine_task/index.js' },
+  { path: ['edge', 'injects_into', 'task_task', 'createWithTargetAliasPath'], file: 'edge/injects_into/task_task/index.js' },
+  { path: ['edge', 'injects_into', 'task_data', 'createWithTargetAliasPath'], file: 'edge/injects_into/task_data/index.js' },
+  { path: ['edge', 'injects_into', 'data_task', 'createWithTargetAliasPath'], file: 'edge/injects_into/data_task/index.js' },
+  { path: ['edge', 'injects_into', 'data_data', 'createWithTargetAliasPath'], file: 'edge/injects_into/data_data/index.js' },
+]
+
+test('dataMapper exposes concrete query implementations and colocated mutation methods', () => {
   const mapper = dataMapper({ g: {}, diagnostics: {} })
   assert.deepEqual(Object.keys(mapper.query).sort(), operationNames('query'))
-  assert.deepEqual(Object.keys(mapper.mutation).sort(), operationNames('mutation'))
+  assert.equal(mapper.mutation, undefined)
 
-  for (const kind of ['query', 'mutation']) {
-    for (const operation of operationNames(kind)) {
-      const source = fs.readFileSync(path.join(specRoot, kind, `${operation}.js`), 'utf8')
-      assert.match(source, /\bg\s*(?:\.|\?\.)/, `${kind}.${operation} must own its graph traversal`)
-      assert.doesNotMatch(source, /\bProxy\b/, `${kind}.${operation} must not be a traversal facade`)
-    }
+  for (const mutation of concreteMutations) {
+    const operation = mutation.path.at(-1)
+    assert.equal(typeof mapperPath(mapper, mutation.path), 'function', mutation.path.join('.'))
+
+    const source = readSpecFile(mutation.file)
+    assert.match(source, new RegExp('function\\s+' + operation + '\\b'), mutation.path.join('.') + ' must be implemented in ' + mutation.file)
+    assert.match(source, /\bg\s*(?:\.|\?\.)/, mutation.path.join('.') + ' must own its graph traversal')
+    assert.doesNotMatch(source, /\bProxy\b/, mutation.path.join('.') + ' must not be a traversal facade')
   }
 })
 

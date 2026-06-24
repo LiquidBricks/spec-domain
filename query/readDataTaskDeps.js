@@ -1,3 +1,8 @@
-export function readDataTaskDeps({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).out(domain.edge.has_dependency.data_task.constants.LABEL).id();
+import { meta as edge } from '../edge/index.js';
+
+export function readDataTaskDeps({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .out(edge.has_dependency.data_task.constants.LABEL)
+    .id();
 }

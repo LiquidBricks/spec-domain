@@ -1,7 +1,9 @@
-export function findComponentAgentVertexId({ g, domain }) {
+import { meta as vertex } from '../vertex/index.js';
+
+export function findComponentAgentVertexId({ g }) {
   return ({ agentID }) => g
     .V()
-    .has('label', domain.vertex.componentAgent.constants.LABEL)
+    .has('label', vertex.componentAgent.constants.LABEL)
     .has('agentID', agentID)
     .id();
 }

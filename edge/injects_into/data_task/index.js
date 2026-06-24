@@ -8,9 +8,18 @@ function create({ g, diagnostics }) {
   }
 }
 
+function createWithTargetAliasPath({ g, diagnostics }) {
+  return async function ({ fromId, toId, targetAliasPath }) {
+    return g
+      .addE(constants.LABEL, fromId, toId)
+      .property('targetAliasPath', targetAliasPath);
+  }
+}
+
 export function data_task({ g, diagnostics }) {
   return {
-    create: create({ g, diagnostics })
+    create: create({ g, diagnostics }),
+    createWithTargetAliasPath: createWithTargetAliasPath({ g, diagnostics }),
   }
 }
 

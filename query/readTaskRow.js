@@ -1,3 +1,5 @@
-export function readTaskRow({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('name');
+export function readTaskRow({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('name');
 }

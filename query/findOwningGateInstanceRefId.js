@@ -1,3 +1,8 @@
-export function findOwningGateInstanceRefId({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).in(domain.edge.uses_gate.gateInstanceRef_componentInstance.constants.LABEL).id();
+import { meta as edge } from '../edge/index.js';
+
+export function findOwningGateInstanceRefId({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .in(edge.uses_gate.gateInstanceRef_componentInstance.constants.LABEL)
+    .id();
 }

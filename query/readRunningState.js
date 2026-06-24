@@ -1,3 +1,5 @@
-export function readRunningState({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('state');
+export function readRunningState({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('state');
 }

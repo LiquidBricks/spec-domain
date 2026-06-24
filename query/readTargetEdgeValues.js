@@ -1,3 +1,5 @@
-export function readTargetEdgeValues({ g, domain }) {
-  return ({ edgeId }) => g.E(edgeId).valueMap('targetAliasPath');
+export function readTargetEdgeValues({ g }) {
+  return ({ edgeId }) => g
+    .E(edgeId)
+    .valueMap('targetAliasPath');
 }

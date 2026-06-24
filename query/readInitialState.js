@@ -1,3 +1,5 @@
-export function readInitialState({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('state', 'updatedAt');
+export function readInitialState({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('state', 'updatedAt');
 }

@@ -1,3 +1,5 @@
-export function readComponentRow({ g, domain }) {
-  return ({ vertexId }) => g.V(vertexId).valueMap('hash');
+export function readComponentRow({ g }) {
+  return ({ vertexId }) => g
+    .V(vertexId)
+    .valueMap('hash');
 }
