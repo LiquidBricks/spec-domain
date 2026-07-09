@@ -17,3 +17,11 @@ test('domain includes component to agentFn edge metadata', () => {
     'domain.edge.has_agentFn.component__agentFn',
   )
 })
+
+test('domain includes gateInstanceRef result metadata', () => {
+  assert.equal(domain.vertex.gateInstanceRef.constants.LABEL, 'domain.vertex.gateInstanceRef')
+  assert.deepEqual(
+    Object.keys(domain.vertex.gateInstanceRef.schema.properties),
+    ['result', 'createdAt', 'updatedAt'],
+  )
+})
