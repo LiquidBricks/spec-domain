@@ -31,6 +31,7 @@ import { findGateInstanceVertexIdByAlias } from "./findGateInstanceVertexIdByAli
 import { findGateInstanceVertexIdForRef } from "./findGateInstanceVertexIdForRef.js";
 import { findGateRefIdByAlias } from "./findGateRefIdByAlias.js";
 import { findGateRefIdForInstanceRef } from "./findGateRefIdForInstanceRef.js";
+import { findGateStateEdgeIdForTargetNode } from "./findGateStateEdgeIdForTargetNode.js";
 import { findGatedComponentIdByHash } from "./findGatedComponentIdByHash.js";
 import { findGatedComponentIdForGateRef } from "./findGatedComponentIdForGateRef.js";
 import { findGatedInstanceComponentId } from "./findGatedInstanceComponentId.js";
@@ -115,6 +116,7 @@ import { listGateInstanceRefIds } from "./listGateInstanceRefIds.js";
 import { listGateParentInstanceVertexIds } from "./listGateParentInstanceVertexIds.js";
 import { listGateRefIds } from "./listGateRefIds.js";
 import { listGateRefInstanceIds } from "./listGateRefInstanceIds.js";
+import { listGateStateEdgeIds } from "./listGateStateEdgeIds.js";
 import { listGateTaskWaitForIds } from "./listGateTaskWaitForIds.js";
 import { listGatedInstanceIds } from "./listGatedInstanceIds.js";
 import { listImportDataWaitForIds } from "./listImportDataWaitForIds.js";
@@ -260,6 +262,7 @@ export function query({ g }) {
     findGateInstanceVertexIdForRef: findGateInstanceVertexIdForRef({ g }),
     findGateRefIdByAlias: findGateRefIdByAlias({ g }),
     findGateRefIdForInstanceRef: findGateRefIdForInstanceRef({ g }),
+    findGateStateEdgeIdForTargetNode: findGateStateEdgeIdForTargetNode({ g }),
     findGatedComponentIdByHash: findGatedComponentIdByHash({ g }),
     findGatedComponentIdForGateRef: findGatedComponentIdForGateRef({ g }),
     findGatedInstanceComponentId: findGatedInstanceComponentId({ g }),
@@ -344,6 +347,7 @@ export function query({ g }) {
     listGateParentInstanceVertexIds: listGateParentInstanceVertexIds({ g }),
     listGateRefIds: listGateRefIds({ g }),
     listGateRefInstanceIds: listGateRefInstanceIds({ g }),
+    listGateStateEdgeIds: listGateStateEdgeIds({ g }),
     listGateTaskWaitForIds: listGateTaskWaitForIds({ g }),
     listGatedInstanceIds: listGatedInstanceIds({ g }),
     listImportDataWaitForIds: listImportDataWaitForIds({ g }),

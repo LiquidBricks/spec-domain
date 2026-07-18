@@ -13,19 +13,9 @@ function create({ g, diagnostics }) {
   }
 }
 
-function setResultAndUpdatedAt({ g, diagnostics }) {
-  return async function ({ result, gateInstanceRefId, updatedAt = new Date().toISOString() }) {
-    return g
-      .V(gateInstanceRefId)
-      .property('result', result)
-      .property('updatedAt', updatedAt);
-  }
-}
-
 export function gateInstanceRef({ g, diagnostics }) {
   return {
     create: create({ g, diagnostics }),
-    setResultAndUpdatedAt: setResultAndUpdatedAt({ g, diagnostics }),
   }
 }
 

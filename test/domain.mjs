@@ -18,10 +18,18 @@ test('domain includes component to agentFn edge metadata', () => {
   )
 })
 
-test('domain includes gateInstanceRef result metadata', () => {
+test('domain keeps gate result metadata on the state-machine edge', () => {
   assert.equal(domain.vertex.gateInstanceRef.constants.LABEL, 'domain.vertex.gateInstanceRef')
   assert.deepEqual(
     Object.keys(domain.vertex.gateInstanceRef.schema.properties),
+    ['createdAt', 'updatedAt'],
+  )
+  assert.equal(
+    domain.edge.has_gate_state.stateMachine_gateInstanceRef.constants.LABEL,
+    'domain.edge.has_gate_state.stateMachine__gateInstanceRef',
+  )
+  assert.deepEqual(
+    Object.keys(domain.edge.has_gate_state.stateMachine_gateInstanceRef.schema.properties),
     ['result', 'createdAt', 'updatedAt'],
   )
 })

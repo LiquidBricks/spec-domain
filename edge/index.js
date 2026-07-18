@@ -1,4 +1,5 @@
 import { has_data_state, meta as hasDataStateMeta } from './has_data_state/index.js';
+import { has_gate_state, meta as hasGateStateMeta } from './has_gate_state/index.js';
 import { has_task_state, meta as hasTaskStateMeta } from './has_task_state/index.js';
 import { has_task, meta as hasTaskMeta } from './has_task/index.js';
 import { has_data, meta as hasDataMeta } from './has_data/index.js';
@@ -20,6 +21,7 @@ import { provides_component, meta as providesComponentMeta } from './provides_co
 export function edge({ g, diagnostics }) {
   return {
     has_data_state: has_data_state({ g, diagnostics }),
+    has_gate_state: has_gate_state({ g, diagnostics }),
     has_task_state: has_task_state({ g, diagnostics }),
     has_task: has_task({ g, diagnostics }),
     has_data: has_data({ g, diagnostics }),
@@ -42,6 +44,7 @@ export function edge({ g, diagnostics }) {
 
 export const meta = {
   has_data_state: hasDataStateMeta,
+  has_gate_state: hasGateStateMeta,
   has_task_state: hasTaskStateMeta,
   has_task: hasTaskMeta,
   has_data: hasDataMeta,

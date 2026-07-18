@@ -26,7 +26,7 @@ const concreteMutations = [
   { path: ['vertex', 'stateMachine', 'setRunning'], file: 'vertex/stateMachine/index.js' },
   { path: ['vertex', 'stateMachine', 'setComplete'], file: 'vertex/stateMachine/index.js' },
   { path: ['vertex', 'importRef', 'setLifecycleWaitFor'], file: 'vertex/importRef/index.js' },
-  { path: ['vertex', 'gateInstanceRef', 'setResultAndUpdatedAt'], file: 'vertex/gateInstanceRef/index.js' },
+  { path: ['edge', 'has_gate_state', 'stateMachine_gateInstanceRef', 'setResultAndUpdatedAt'], file: 'edge/has_gate_state/stateMachine_gateInstanceRef/index.js' },
   { path: ['edge', 'has_data_state', 'stateMachine_data', 'setRunning'], file: 'edge/has_data_state/stateMachine_data/index.js' },
   { path: ['edge', 'has_data_state', 'stateMachine_data', 'setStatus'], file: 'edge/has_data_state/stateMachine_data/index.js' },
   { path: ['edge', 'has_data_state', 'stateMachine_data', 'setStatusAndResult'], file: 'edge/has_data_state/stateMachine_data/index.js' },

@@ -1,5 +1,5 @@
 export function readResultValues({ g }) {
-  return ({ vertexId }) => g
-    .V(vertexId)
+  return ({ edgeId }) => g
+    .E(edgeId)
     .valueMap('result');
 }

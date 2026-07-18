@@ -1,6 +1,6 @@
 export const schema = {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "vertex.gateInstanceRef",
+  "title": "edge.has_gate_state.stateMachine__gateInstanceRef",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -8,6 +8,7 @@ export const schema = {
     "updatedAt"
   ],
   "properties": {
+    "result": { "type": "string" },
     "createdAt": { "type": "string", "format": "date-time" },
     "updatedAt": { "type": "string", "format": "date-time" }
   }
