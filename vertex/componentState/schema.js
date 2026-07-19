@@ -4,10 +4,12 @@ export const schema = {
   "type": "object",
   "additionalProperties": false,
   "required": [
+    "state",
     "createdAt",
     "updatedAt"
   ],
   "properties": {
+    "state": { "type": "object" },
     "createdAt": { "type": "string", "format": "date-time" },
     "updatedAt": { "type": "string", "format": "date-time" }
   }

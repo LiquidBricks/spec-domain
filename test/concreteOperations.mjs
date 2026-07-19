@@ -23,6 +23,7 @@ function mapperPath(root, segments) {
 }
 
 const concreteMutations = [
+  { path: ['vertex', 'componentState', 'setState'], file: 'vertex/componentState/index.js' },
   { path: ['vertex', 'stateMachine', 'setRunning'], file: 'vertex/stateMachine/index.js' },
   { path: ['vertex', 'stateMachine', 'setComplete'], file: 'vertex/stateMachine/index.js' },
   { path: ['vertex', 'importRef', 'setLifecycleWaitFor'], file: 'vertex/importRef/index.js' },

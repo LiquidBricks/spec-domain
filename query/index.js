@@ -156,6 +156,8 @@ import { readComponentHash } from "./readComponentHash.js";
 import { readComponentInstanceId } from "./readComponentInstanceId.js";
 import { readComponentRow } from "./readComponentRow.js";
 import { readComponentRows } from "./readComponentRows.js";
+import { readComponentState } from "./readComponentState.js";
+import { readComponentStateId } from "./readComponentStateId.js";
 import { readComponentTasks } from "./readComponentTasks.js";
 import { readComponentValues } from "./readComponentValues.js";
 import { readDataDeps } from "./readDataDeps.js";
@@ -387,6 +389,8 @@ export function query({ g }) {
     readComponentInstanceId: readComponentInstanceId({ g }),
     readComponentRow: readComponentRow({ g }),
     readComponentRows: readComponentRows({ g }),
+    readComponentState: readComponentState({ g }),
+    readComponentStateId: readComponentStateId({ g }),
     readComponentTasks: readComponentTasks({ g }),
     readComponentValues: readComponentValues({ g }),
     readDataDeps: readDataDeps({ g }),
