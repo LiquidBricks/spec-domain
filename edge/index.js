@@ -17,6 +17,7 @@ import { import_of, meta as importOfMeta } from './import_of/index.js';
 import { gate_of, meta as gateOfMeta } from './gate_of/index.js';
 import { uses_gate, meta as usesGateMeta } from './uses_gate/index.js';
 import { provides_component, meta as providesComponentMeta } from './provides_component/index.js';
+import { has_snapshot, meta as hasSnapshotMeta } from './has_snapshot/index.js';
 
 export function edge({ g, diagnostics }) {
   return {
@@ -39,6 +40,7 @@ export function edge({ g, diagnostics }) {
     uses_gate: uses_gate({ g, diagnostics }),
     injects_into: injects_into({ g, diagnostics }),
     provides_component: provides_component({ g, diagnostics }),
+    has_snapshot: has_snapshot({ g, diagnostics }),
   };
 }
 
@@ -62,4 +64,5 @@ export const meta = {
   uses_gate: usesGateMeta,
   injects_into: injectsIntoMeta,
   provides_component: providesComponentMeta,
+  has_snapshot: hasSnapshotMeta,
 }
