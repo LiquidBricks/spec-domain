@@ -36,10 +36,6 @@ const concreteMutations = [
   { path: ['edge', 'has_task_state', 'stateMachine_task', 'setStatus'], file: 'edge/has_task_state/stateMachine_task/index.js' },
   { path: ['edge', 'has_task_state', 'stateMachine_task', 'setStatusAndResult'], file: 'edge/has_task_state/stateMachine_task/index.js' },
   { path: ['edge', 'has_task_state', 'stateMachine_task', 'updateResultStatusUpdatedAt'], file: 'edge/has_task_state/stateMachine_task/index.js' },
-  { path: ['edge', 'injects_into', 'task_task', 'createWithTargetAliasPath'], file: 'edge/injects_into/task_task/index.js' },
-  { path: ['edge', 'injects_into', 'task_data', 'createWithTargetAliasPath'], file: 'edge/injects_into/task_data/index.js' },
-  { path: ['edge', 'injects_into', 'data_task', 'createWithTargetAliasPath'], file: 'edge/injects_into/data_task/index.js' },
-  { path: ['edge', 'injects_into', 'data_data', 'createWithTargetAliasPath'], file: 'edge/injects_into/data_data/index.js' },
 ]
 
 test('dataMapper exposes concrete query implementations and colocated mutation methods', () => {

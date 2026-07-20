@@ -1,4 +1,9 @@
-import { readOwnerIndex, readValue, upsertOwnerIndex } from '../../_shared/ownerIndex.js';
+import {
+  isIsoDateTime,
+  readOwnerIndex,
+  readValue,
+  upsertOwnerIndex,
+} from '../../_shared/ownerIndex.js';
 import { readComponentInjectionRoutingIndex } from '../../component/injectionRouting/index.js';
 import { SCHEMA_VERSION as COMPONENT_INDEX_SCHEMA_VERSION } from '../../component/injectionRouting/constants.js';
 import { LABEL as instanceOfLabel } from '../../../edge/instance_of/componentInstance_component/constants.js';
@@ -15,16 +20,34 @@ import * as constants from './constants.js';
 import { ownerEdgeSchema, schema } from './schema.js';
 
 async function readRefChild({ g, refId, definitionEdgeLabel, instanceEdgeLabel }) {
-  const [[definitionId], [instanceVertexId]] = await Promise.all([
+  const [definitionIds, instanceVertexIds] = await Promise.all([
     g.V(refId).out(definitionEdgeLabel).id(),
     g.V(refId).out(instanceEdgeLabel).id(),
   ]);
+  const [definitionId] = definitionIds;
+  const [instanceVertexId] = instanceVertexIds;
 
-  if (!definitionId || !instanceVertexId) return null;
+  if (
+    definitionIds.length !== 1
+    || instanceVertexIds.length !== 1
+    || !definitionId
+    || !instanceVertexId
+  ) {
+    throw routingIndexError('binding', 'instance_reference_invalid', {
+      refId,
+      definitionCount: definitionIds.length,
+      instanceCount: instanceVertexIds.length,
+    });
+  }
 
   const [row] = await g.V(definitionId).valueMap('alias');
   const alias = readValue(row, 'alias');
-  if (typeof alias !== 'string' || !alias.length) return null;
+  if (typeof alias !== 'string' || !alias.length) {
+    throw routingIndexError('binding', 'instance_reference_alias_missing', {
+      refId,
+      definitionId,
+    });
+  }
 
   return { alias, instanceVertexId };
 }
@@ -36,13 +59,13 @@ async function readInstanceChildren({ g, instanceVertexId }) {
   ]);
 
   const children = await Promise.all([
-    ...(importRefIds ?? []).map((refId) => readRefChild({
+    ...importRefIds.map((refId) => readRefChild({
       g,
       refId,
       definitionEdgeLabel: importRefDefinitionLabel,
       instanceEdgeLabel: importRefInstanceLabel,
     })),
-    ...(gateRefIds ?? []).map((refId) => readRefChild({
+    ...gateRefIds.map((refId) => readRefChild({
       g,
       refId,
       definitionEdgeLabel: gateRefDefinitionLabel,
@@ -50,7 +73,7 @@ async function readInstanceChildren({ g, instanceVertexId }) {
     })),
   ]);
 
-  return children.filter(Boolean);
+  return children;
 }
 
 async function readStateSources({ g, instance }) {
@@ -62,9 +85,26 @@ async function readStateSources({ g, instance }) {
     { type: 'task', label: taskStateLabel },
   ]) {
     const edgeIds = await g.V(instance.stateMachineId).outE(label).id();
-    for (const stateEdgeId of edgeIds ?? []) {
+    for (const stateEdgeId of edgeIds) {
       const [nodeId] = await g.E(stateEdgeId).inV().id();
-      if (!nodeId) continue;
+      if (!nodeId) {
+        throw routingIndexError('binding', 'state_edge_target_missing', {
+          instanceVertexId: instance.instanceVertexId,
+          stateEdgeId,
+        });
+      }
+      const nodeKey = `${type}:${nodeId}`;
+      if (
+        Object.hasOwn(sourcesByStateEdgeId, stateEdgeId)
+        || stateEdgeByNode.has(nodeKey)
+      ) {
+        throw routingIndexError('binding', 'state_edge_ambiguous', {
+          instanceVertexId: instance.instanceVertexId,
+          stateEdgeId,
+          nodeId,
+          type,
+        });
+      }
 
       const source = {
         instanceId: instance.instanceId,
@@ -76,7 +116,7 @@ async function readStateSources({ g, instance }) {
         targets: [],
       };
       sourcesByStateEdgeId[stateEdgeId] = source;
-      stateEdgeByNode.set(`${type}:${nodeId}`, source);
+      stateEdgeByNode.set(nodeKey, source);
     }
   }
 
@@ -94,15 +134,24 @@ async function buildInstanceTree({ g, rootInstanceVertexId }) {
     if (byId.has(instanceVertexId)) return byId.get(instanceVertexId);
     visiting.add(instanceVertexId);
 
-    const [[componentId], [stateMachineId], [instanceValues], children] = await Promise.all([
+    const [componentIds, stateMachineIds, [instanceValues], children] = await Promise.all([
       g.V(instanceVertexId).out(instanceOfLabel).id(),
       g.V(instanceVertexId).out(hasStateMachineLabel).id(),
       g.V(instanceVertexId).valueMap('instanceId'),
       readInstanceChildren({ g, instanceVertexId }),
     ]);
+    const [componentId] = componentIds;
+    const [stateMachineId] = stateMachineIds;
     const instanceId = readValue(instanceValues, 'instanceId');
 
-    if (!componentId || !stateMachineId || typeof instanceId !== 'string' || !instanceId.length) {
+    if (
+      componentIds.length !== 1
+      || stateMachineIds.length !== 1
+      || !componentId
+      || !stateMachineId
+      || typeof instanceId !== 'string'
+      || !instanceId.length
+    ) {
       throw new TypeError(`Incomplete component instance context for ${instanceVertexId}`);
     }
 
@@ -138,7 +187,7 @@ async function buildInstanceTree({ g, rootInstanceVertexId }) {
 
 function resolveAliasPath(ownerInstance, aliasPath) {
   let current = ownerInstance;
-  for (const alias of aliasPath ?? []) {
+  for (const alias of aliasPath) {
     current = current?.children.get(alias);
     if (!current) return null;
   }
@@ -151,14 +200,16 @@ function compareTargets(left, right) {
     .localeCompare([right.instanceId, right.stateEdgeId, right.type, right.name].join('\u0000'));
 }
 
-function invalidBinding(reason, details = {}) {
-  return { bound: false, reason, ...details };
+function routingIndexError(operation, reason, details = {}) {
+  return Object.assign(
+    new TypeError(`Component instance injection routing ${operation} failed: ${reason}`),
+    { reason, details },
+  );
 }
 
 async function buildBoundPayloads({ g, rootInstanceVertexId }) {
   const { instances } = await buildInstanceTree({ g, rootInstanceVertexId });
   const planByComponentId = new Map();
-  const missingComponentIds = new Set();
 
   for (const ownerInstance of instances) {
     let plan = planByComponentId.get(ownerInstance.componentId);
@@ -169,16 +220,12 @@ async function buildBoundPayloads({ g, rootInstanceVertexId }) {
       });
       planByComponentId.set(ownerInstance.componentId, plan);
     }
-    if (!plan.found) {
-      missingComponentIds.add(ownerInstance.componentId);
-      continue;
-    }
 
-    for (const route of plan.routes ?? []) {
-      const sourceInstance = resolveAliasPath(ownerInstance, route.source?.aliasPath);
-      const targetInstance = resolveAliasPath(ownerInstance, route.target?.aliasPath);
+    for (const route of plan.routes) {
+      const sourceInstance = resolveAliasPath(ownerInstance, route.source.aliasPath);
+      const targetInstance = resolveAliasPath(ownerInstance, route.target.aliasPath);
       if (!sourceInstance || !targetInstance) {
-        return invalidBinding('alias_path_unresolved', {
+        throw routingIndexError('binding', 'alias_path_unresolved', {
           componentId: ownerInstance.componentId,
           injectionEdgeId: route.injectionEdgeId,
         });
@@ -187,7 +234,7 @@ async function buildBoundPayloads({ g, rootInstanceVertexId }) {
         sourceInstance.componentId !== route.source.componentId
         || targetInstance.componentId !== route.target.componentId
       ) {
-        return invalidBinding('component_mismatch', {
+        throw routingIndexError('binding', 'component_mismatch', {
           componentId: ownerInstance.componentId,
           injectionEdgeId: route.injectionEdgeId,
         });
@@ -196,7 +243,7 @@ async function buildBoundPayloads({ g, rootInstanceVertexId }) {
       const source = sourceInstance.stateEdgeByNode.get(`${route.source.type}:${route.source.nodeId}`);
       const targetSource = targetInstance.stateEdgeByNode.get(`${route.target.type}:${route.target.nodeId}`);
       if (!source || !targetSource || typeof route.target.name !== 'string' || !route.target.name.length) {
-        return invalidBinding('state_edge_unresolved', {
+        throw routingIndexError('binding', 'state_edge_unresolved', {
           componentId: ownerInstance.componentId,
           injectionEdgeId: route.injectionEdgeId,
         });
@@ -224,12 +271,6 @@ async function buildBoundPayloads({ g, rootInstanceVertexId }) {
     }
   }
 
-  if (missingComponentIds.size) {
-    return invalidBinding('component_index_missing', {
-      missingComponentIds: Array.from(missingComponentIds).sort(),
-    });
-  }
-
   const payloads = instances.map((instance) => {
     for (const source of Object.values(instance.sourcesByStateEdgeId)) {
       source.targets.sort(compareTargets);
@@ -246,15 +287,14 @@ async function buildBoundPayloads({ g, rootInstanceVertexId }) {
     };
   });
 
-  return { bound: true, payloads };
+  return payloads;
 }
 
 function bind({ g }) {
   return async function ({ rootInstanceVertexId }) {
-    const built = await buildBoundPayloads({ g, rootInstanceVertexId });
-    if (!built.bound) return built;
+    const payloads = await buildBoundPayloads({ g, rootInstanceVertexId });
 
-    for (const { ownerVertexId, payload } of built.payloads) {
+    for (const { ownerVertexId, payload } of payloads) {
       await upsertOwnerIndex({
         g,
         ownerVertexId,
@@ -266,12 +306,18 @@ function bind({ g }) {
       });
     }
 
-    return { bound: true, indexedInstanceCount: built.payloads.length };
+    return { indexedInstanceCount: payloads.length };
   };
 }
 
 function lookup({ g }) {
-  return async function ({ instanceVertexId, stateEdgeId }) {
+  return async function ({
+    instanceId,
+    instanceVertexId,
+    stateMachineId,
+    stateEdgeId,
+    type,
+  }) {
     const result = await readOwnerIndex({
       g,
       ownerVertexId: instanceVertexId,
@@ -279,10 +325,15 @@ function lookup({ g }) {
       ownerEdgeLabel: constants.OWNER_EDGE_LABEL,
     });
 
-    if (!result.found) return { found: false };
+    if (!result.found) {
+      throw routingIndexError('lookup', 'index_missing', { instanceVertexId, stateEdgeId });
+    }
     const payload = result.payload;
     const validPayload = result.schemaVersion === constants.SCHEMA_VERSION
+      && isIsoDateTime(result.builtAt)
       && payload
+      && typeof payload.componentId === 'string'
+      && payload.componentId.length
       && payload.instanceVertexId === instanceVertexId
       && payload.componentPlanSchemaVersion === COMPONENT_INDEX_SCHEMA_VERSION
       && typeof payload.instanceId === 'string'
@@ -291,21 +342,78 @@ function lookup({ g }) {
       && typeof payload.sourcesByStateEdgeId === 'object'
       && !Array.isArray(payload.sourcesByStateEdgeId);
     if (!validPayload) {
-      return { found: false, indexFound: true, stale: true };
+      throw routingIndexError('lookup', 'index_invalid', { instanceVertexId, stateEdgeId });
     }
 
     const source = payload.sourcesByStateEdgeId[stateEdgeId];
-    if (!source) return { found: false, indexFound: true };
+    if (!source) {
+      throw routingIndexError('lookup', 'source_missing', { instanceVertexId, stateEdgeId });
+    }
+    const targetKeys = new Set();
+    const targetsAreValid = Array.isArray(source.targets)
+      && source.targets.every((target) => {
+        const valid = (
+          typeof target?.instanceId === 'string'
+          && target.instanceId.length
+          && typeof target.instanceVertexId === 'string'
+          && target.instanceVertexId.length
+          && typeof target.stateMachineId === 'string'
+          && target.stateMachineId.length
+          && typeof target.stateEdgeId === 'string'
+          && target.stateEdgeId.length
+          && typeof target.nodeId === 'string'
+          && target.nodeId.length
+          && (target.type === 'data' || target.type === 'task')
+          && typeof target.name === 'string'
+          && target.name.length
+        );
+        if (!valid) return false;
+
+        const targetKey = `${target.instanceVertexId}:${target.stateEdgeId}`;
+        if (
+          targetKeys.has(targetKey)
+          || (
+            target.instanceVertexId === instanceVertexId
+            && target.stateEdgeId === stateEdgeId
+          )
+        ) return false;
+
+        targetKeys.add(targetKey);
+        return true;
+      });
+    const sourceIsValid = (
+      typeof source.instanceId === 'string'
+      && source.instanceId.length
+      && source.instanceId === payload.instanceId
+      && source.instanceVertexId === instanceVertexId
+      && typeof source.stateMachineId === 'string'
+      && source.stateMachineId.length
+      && source.stateEdgeId === stateEdgeId
+      && typeof source.nodeId === 'string'
+      && source.nodeId.length
+      && (source.type === 'data' || source.type === 'task')
+      && targetsAreValid
+    );
+    if (!sourceIsValid) {
+      throw routingIndexError('lookup', 'source_invalid', { instanceVertexId, stateEdgeId });
+    }
     if (
-      source.instanceVertexId !== instanceVertexId
-      || source.stateEdgeId !== stateEdgeId
-      || !Array.isArray(source.targets)
+      source.instanceId !== instanceId
+      || source.stateMachineId !== stateMachineId
+      || source.type !== type
     ) {
-      return { found: false, indexFound: true, stale: true };
+      throw routingIndexError('lookup', 'source_mismatch', {
+        expected: {
+          instanceId,
+          instanceVertexId,
+          stateMachineId,
+          stateEdgeId,
+          type,
+        },
+      });
     }
 
     return {
-      found: true,
       source,
       targets: source.targets,
       schemaVersion: result.schemaVersion,

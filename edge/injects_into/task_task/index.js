@@ -19,14 +19,9 @@ function create({ g, diagnostics }) {
   }
 }
 
-function createWithTargetAliasPath({ g, diagnostics }) {
-  return create({ g, diagnostics })
-}
-
 export function task_task({ g, diagnostics }) {
   return {
     create: create({ g, diagnostics }),
-    createWithTargetAliasPath: createWithTargetAliasPath({ g, diagnostics }),
   }
 }
 

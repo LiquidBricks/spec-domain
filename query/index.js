@@ -67,9 +67,7 @@ import { findMainTaskId } from "./findMainTaskId.js";
 import { findNestedImportRefId } from "./findNestedImportRefId.js";
 import { findNestedInstanceVertexId } from "./findNestedInstanceVertexId.js";
 import { findOwningGateInstanceRefId } from "./findOwningGateInstanceRefId.js";
-import { findParentGateId } from "./findParentGateId.js";
 import { findParentId } from "./findParentId.js";
-import { findParentImportId } from "./findParentImportId.js";
 import { findParentInstanceVertexId } from "./findParentInstanceVertexId.js";
 import { findProvidedComponentId } from "./findProvidedComponentId.js";
 import { findProviderComponentId } from "./findProviderComponentId.js";
@@ -102,8 +100,6 @@ import { listDataDependencyAndWaitForNodeIds } from "./listDataDependencyAndWait
 import { listDataDependencyNodeIds } from "./listDataDependencyNodeIds.js";
 import { listDataNodeIds } from "./listDataNodeIds.js";
 import { listDataStateEdgeIds } from "./listDataStateEdgeIds.js";
-import { listDataToDataInjectionEdgeIds } from "./listDataToDataInjectionEdgeIds.js";
-import { listDataToTaskInjectionEdgeIds } from "./listDataToTaskInjectionEdgeIds.js";
 import { listDepTaskIds } from "./listDepTaskIds.js";
 import { listDependentDataNodeIdsForData } from "./listDependentDataNodeIdsForData.js";
 import { listDependentDataNodeIdsForTask } from "./listDependentDataNodeIdsForTask.js";
@@ -138,8 +134,6 @@ import { listTaskDependencyAndWaitForNodeIds } from "./listTaskDependencyAndWait
 import { listTaskDependencyNodeIds } from "./listTaskDependencyNodeIds.js";
 import { listTaskNodeIds } from "./listTaskNodeIds.js";
 import { listTaskStateEdgeIds } from "./listTaskStateEdgeIds.js";
-import { listTaskToDataInjectionEdgeIds } from "./listTaskToDataInjectionEdgeIds.js";
-import { listTaskToTaskInjectionEdgeIds } from "./listTaskToTaskInjectionEdgeIds.js";
 import { listWaitForDataIds } from "./listWaitForDataIds.js";
 import { listWaitForTaskIds } from "./listWaitForTaskIds.js";
 import { readAfterStartValues } from "./readAfterStartValues.js";
@@ -212,10 +206,7 @@ import { readStateMachineStatusMaps } from "./readStateMachineStatusMaps.js";
 import { readStateMachineTaskIds } from "./readStateMachineTaskIds.js";
 import { readStateMachineVertexId } from "./readStateMachineVertexId.js";
 import { readTargetDataTaskTargets } from "./readTargetDataTaskTargets.js";
-import { readTargetEdgeValues } from "./readTargetEdgeValues.js";
-import { readTargetInstanceMap } from "./readTargetInstanceMap.js";
 import { readTargetInstanceValues } from "./readTargetInstanceValues.js";
-import { readTargetStateMachineId } from "./readTargetStateMachineId.js";
 import { readTargetTaskDataTargets } from "./readTargetTaskDataTargets.js";
 import { readTask1DataDeps } from "./readTask1DataDeps.js";
 import { readTask1DeferredDeps } from "./readTask1DeferredDeps.js";
@@ -300,9 +291,7 @@ export function query({ g }) {
     findNestedImportRefId: findNestedImportRefId({ g }),
     findNestedInstanceVertexId: findNestedInstanceVertexId({ g }),
     findOwningGateInstanceRefId: findOwningGateInstanceRefId({ g }),
-    findParentGateId: findParentGateId({ g }),
     findParentId: findParentId({ g }),
-    findParentImportId: findParentImportId({ g }),
     findParentInstanceVertexId: findParentInstanceVertexId({ g }),
     findProvidedComponentId: findProvidedComponentId({ g }),
     findProviderComponentId: findProviderComponentId({ g }),
@@ -335,8 +324,6 @@ export function query({ g }) {
     listDataDependencyNodeIds: listDataDependencyNodeIds({ g }),
     listDataNodeIds: listDataNodeIds({ g }),
     listDataStateEdgeIds: listDataStateEdgeIds({ g }),
-    listDataToDataInjectionEdgeIds: listDataToDataInjectionEdgeIds({ g }),
-    listDataToTaskInjectionEdgeIds: listDataToTaskInjectionEdgeIds({ g }),
     listDepTaskIds: listDepTaskIds({ g }),
     listDependentDataNodeIdsForData: listDependentDataNodeIdsForData({ g }),
     listDependentDataNodeIdsForTask: listDependentDataNodeIdsForTask({ g }),
@@ -371,8 +358,6 @@ export function query({ g }) {
     listTaskDependencyNodeIds: listTaskDependencyNodeIds({ g }),
     listTaskNodeIds: listTaskNodeIds({ g }),
     listTaskStateEdgeIds: listTaskStateEdgeIds({ g }),
-    listTaskToDataInjectionEdgeIds: listTaskToDataInjectionEdgeIds({ g }),
-    listTaskToTaskInjectionEdgeIds: listTaskToTaskInjectionEdgeIds({ g }),
     listWaitForDataIds: listWaitForDataIds({ g }),
     listWaitForTaskIds: listWaitForTaskIds({ g }),
     readAfterStartValues: readAfterStartValues({ g }),
@@ -445,10 +430,7 @@ export function query({ g }) {
     readStateMachineTaskIds: readStateMachineTaskIds({ g }),
     readStateMachineVertexId: readStateMachineVertexId({ g }),
     readTargetDataTaskTargets: readTargetDataTaskTargets({ g }),
-    readTargetEdgeValues: readTargetEdgeValues({ g }),
-    readTargetInstanceMap: readTargetInstanceMap({ g }),
     readTargetInstanceValues: readTargetInstanceValues({ g }),
-    readTargetStateMachineId: readTargetStateMachineId({ g }),
     readTargetTaskDataTargets: readTargetTaskDataTargets({ g }),
     readTask1DataDeps: readTask1DataDeps({ g }),
     readTask1DeferredDeps: readTask1DeferredDeps({ g }),

@@ -1,41 +1,33 @@
 export function readValue(row, property) {
-  const value = row?.[property] ?? row;
-  return Array.isArray(value) && value.length === 1 ? value[0] : value;
+  return row?.[property];
+}
+
+export function isIsoDateTime(value) {
+  if (typeof value !== 'string') return false;
+  const milliseconds = Date.parse(value);
+  return Number.isFinite(milliseconds)
+    && new Date(milliseconds).toISOString() === value;
 }
 
 export function normalizeAliasPath(value) {
-  const candidate = Array.isArray(value) && value.length === 1 && typeof value[0] === 'string'
-    ? value[0]
-    : value;
-
-  if (candidate === undefined || candidate === null || candidate === '') return [];
-
-  if (Array.isArray(candidate)) {
-    return candidate
-      .map((entry) => String(entry).trim())
-      .filter(Boolean);
+  if (typeof value !== 'string') {
+    throw new TypeError('Injection alias path must be a JSON array string');
   }
-
-  if (typeof candidate !== 'string') return [];
-
-  const trimmed = candidate.trim();
-  if (!trimmed) return [];
-
+  let parsed;
   try {
-    const parsed = JSON.parse(trimmed);
-    if (Array.isArray(parsed)) {
-      return parsed
-        .map((entry) => String(entry).trim())
-        .filter(Boolean);
-    }
+    parsed = JSON.parse(value);
   } catch {
-    // Older records may use dot notation instead of a JSON array string.
+    throw new TypeError('Injection alias path must be a JSON array string');
   }
 
-  return trimmed
-    .split('.')
-    .map((entry) => entry.trim())
-    .filter(Boolean);
+  if (
+    !Array.isArray(parsed)
+    || parsed.some((alias) => typeof alias !== 'string' || !alias.length)
+  ) {
+    throw new TypeError('Injection alias path must be a JSON array string');
+  }
+
+  return parsed;
 }
 
 async function requireOwner({ g, ownerVertexId, ownerName }) {
@@ -57,7 +49,11 @@ export async function readOwnerIndex({
     .has('label', indexVertexLabel)
     .id();
 
-  const [indexVertexId] = indexVertexIds ?? [];
+  if (indexVertexIds.length > 1) {
+    throw new TypeError(`Owner has multiple ${indexVertexLabel} indexes: ${ownerVertexId}`);
+  }
+
+  const [indexVertexId] = indexVertexIds;
   if (!indexVertexId) {
     return {
       found: false,
@@ -99,7 +95,11 @@ export async function upsertOwnerIndex({
     .has('label', indexVertexLabel)
     .id();
 
-  let [indexVertexId] = existingIndexVertexIds ?? [];
+  if (existingIndexVertexIds.length > 1) {
+    throw new TypeError(`Owner has multiple ${indexVertexLabel} indexes: ${ownerVertexId}`);
+  }
+
+  let [indexVertexId] = existingIndexVertexIds;
 
   if (indexVertexId) {
     await g
@@ -121,13 +121,7 @@ export async function upsertOwnerIndex({
       .property('updatedAt', builtAt);
   }
 
-  const duplicateIndexVertexIds = (existingIndexVertexIds ?? []).slice(1);
-  if (duplicateIndexVertexIds.length) {
-    await g.V(duplicateIndexVertexIds).drop();
-  }
-
   return {
-    found: true,
     indexVertexId,
     schemaVersion,
     builtAt,

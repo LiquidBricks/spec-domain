@@ -1,4 +1,10 @@
-import { normalizeAliasPath, readOwnerIndex, readValue, upsertOwnerIndex } from '../../_shared/ownerIndex.js';
+import {
+  isIsoDateTime,
+  normalizeAliasPath,
+  readOwnerIndex,
+  readValue,
+  upsertOwnerIndex,
+} from '../../_shared/ownerIndex.js';
 import { LABEL as dataLabel } from '../../../vertex/data/constants.js';
 import { LABEL as taskLabel } from '../../../vertex/task/constants.js';
 import { LABEL as componentDataEdgeLabel } from '../../../edge/has_data/component_data/constants.js';
@@ -8,18 +14,18 @@ import { ownerEdgeSchema, schema } from './schema.js';
 
 function compareRoutes(left, right) {
   return [
-    left.source.aliasPath.join('.'),
+    JSON.stringify(left.source.aliasPath),
     left.source.type,
     left.source.nodeId,
-    left.target.aliasPath.join('.'),
+    JSON.stringify(left.target.aliasPath),
     left.target.type,
     left.target.nodeId,
     left.injectionEdgeId,
   ].join('\u0000').localeCompare([
-    right.source.aliasPath.join('.'),
+    JSON.stringify(right.source.aliasPath),
     right.source.type,
     right.source.nodeId,
-    right.target.aliasPath.join('.'),
+    JSON.stringify(right.target.aliasPath),
     right.target.type,
     right.target.nodeId,
     right.injectionEdgeId,
@@ -35,14 +41,15 @@ async function readNode({ g, nodeId, type }) {
     throw new TypeError(`Injection ${type} node has unexpected label: ${nodeId}`);
   }
 
-  const [[componentId], [row]] = await Promise.all([
+  const [componentIds, [row]] = await Promise.all([
     g.V(nodeId).in(ownerEdgeLabel).id(),
     g.V(nodeId).valueMap('name'),
   ]);
+  const [componentId] = componentIds;
   const name = readValue(row, 'name');
 
-  if (typeof componentId !== 'string' || !componentId.length) {
-    throw new TypeError(`Injection ${type} node has no owning component: ${nodeId}`);
+  if (componentIds.length !== 1 || typeof componentId !== 'string' || !componentId.length) {
+    throw new TypeError(`Injection ${type} node must have exactly one owning component: ${nodeId}`);
   }
   if (typeof name !== 'string' || !name.length) {
     throw new TypeError(`Injection ${type} node has no name: ${nodeId}`);
@@ -60,17 +67,22 @@ async function readCanonicalRoutes({ g, componentId }) {
   const routes = [];
 
   for (const { label, sourceType, targetType } of constants.INJECTION_EDGE_TYPES) {
-    const edgeIds = await g.E().has('label', label).id();
+    const edgeIds = await g
+      .E()
+      .has('label', label)
+      .has('ownerComponentId', componentId)
+      .id();
 
-    for (const injectionEdgeId of edgeIds ?? []) {
+    for (const injectionEdgeId of edgeIds) {
       const [[edgeValues], [sourceNodeId], [targetNodeId]] = await Promise.all([
-        g.E(injectionEdgeId).valueMap('ownerComponentId', 'sourceAliasPath', 'targetAliasPath'),
+        g.E(injectionEdgeId).valueMap('sourceAliasPath', 'targetAliasPath'),
         g.E(injectionEdgeId).outV().id(),
         g.E(injectionEdgeId).inV().id(),
       ]);
 
-      if (readValue(edgeValues, 'ownerComponentId') !== componentId) continue;
-      if (!sourceNodeId || !targetNodeId) continue;
+      if (!sourceNodeId || !targetNodeId) {
+        throw new TypeError(`Owned injection edge has missing endpoint: ${injectionEdgeId}`);
+      }
 
       const [source, target] = await Promise.all([
         readNode({ g, nodeId: sourceNodeId, type: sourceType }),
@@ -103,14 +115,11 @@ export async function readComponentInjectionRoutingIndex({ g, componentId }) {
   });
 
   if (!result.found) {
-    return {
-      ...result,
-      componentId,
-      componentHash: null,
-      routes: [],
-    };
+    throw new TypeError(`Component injection routing index is missing: ${componentId}`);
   }
 
+  const [componentValues] = await g.V(componentId).valueMap('hash');
+  const canonicalComponentHash = readValue(componentValues, 'hash');
   const payload = result.payload;
   const routesAreValid = Array.isArray(payload?.routes)
     && payload.routes.every(route => (
@@ -130,26 +139,22 @@ export async function readComponentInjectionRoutingIndex({ g, componentId }) {
       ))
     ));
   const valid = result.schemaVersion === constants.SCHEMA_VERSION
+    && isIsoDateTime(result.builtAt)
     && payload
     && payload.componentId === componentId
     && typeof payload.componentHash === 'string'
     && payload.componentHash.length
+    && payload.componentHash === canonicalComponentHash
     && routesAreValid;
 
   if (!valid) {
-    return {
-      ...result,
-      found: false,
-      indexFound: true,
-      stale: true,
-      componentId,
-      componentHash: null,
-      routes: [],
-    };
+    throw new TypeError(`Component injection routing index is invalid: ${componentId}`);
   }
 
   return {
-    ...result,
+    indexVertexId: result.indexVertexId,
+    schemaVersion: result.schemaVersion,
+    builtAt: result.builtAt,
     componentId: payload.componentId,
     componentHash: payload.componentHash,
     routes: payload.routes,
@@ -158,14 +163,6 @@ export async function readComponentInjectionRoutingIndex({ g, componentId }) {
 
 function compile({ g }) {
   return async function ({ componentId }) {
-    const existing = await readComponentInjectionRoutingIndex({ g, componentId });
-    if (existing.found) {
-      return {
-        ...existing,
-        compiled: false,
-      };
-    }
-
     const [[componentValues], routes] = await Promise.all([
       g.V(componentId).valueMap('hash'),
       readCanonicalRoutes({ g, componentId }),
@@ -190,7 +187,6 @@ function compile({ g }) {
       componentId,
       componentHash,
       routes,
-      compiled: true,
     };
   };
 }
