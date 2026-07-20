@@ -1,5 +1,9 @@
 import { schema } from "./schema.js";
 import * as constants from './constants.js'
+import {
+  componentInjectionRouting,
+  meta as injectionRoutingIndexMeta,
+} from '../../indexGraph/component/injectionRouting/index.js'
 
 function create({ g, diagnostics }) {
   return async function ({ hash, name }) {
@@ -17,11 +21,17 @@ function create({ g, diagnostics }) {
 
 export function component({ g, diagnostics }) {
   return {
-    create: create({ g, diagnostics })
+    create: create({ g, diagnostics }),
+    index: {
+      injectionRouting: componentInjectionRouting({ g, diagnostics }),
+    },
   }
 }
 
 export const meta = {
   schema,
   constants,
+  index: {
+    injectionRouting: injectionRoutingIndexMeta,
+  },
 }

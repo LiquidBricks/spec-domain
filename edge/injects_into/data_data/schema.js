@@ -3,6 +3,10 @@ export const schema = {
   "title": "edge.injects_into.data__data",
   "type": "object",
   "additionalProperties": false,
-  "required": [],
-  "properties": {}
+  "required": ["ownerComponentId", "sourceAliasPath", "targetAliasPath"],
+  "properties": {
+    "ownerComponentId": { "type": "string" },
+    "sourceAliasPath": { "type": "string" },
+    "targetAliasPath": { "type": "string" }
+  }
 }
