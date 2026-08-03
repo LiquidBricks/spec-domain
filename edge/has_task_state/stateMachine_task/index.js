@@ -49,6 +49,15 @@ function updateResultStatusUpdatedAt({ g, diagnostics }) {
   }
 }
 
+function updateStatusUpdatedAt({ g, diagnostics }) {
+  return async function ({ edgeId, status, updatedAt }) {
+    return g
+      .E(edgeId)
+      .property('status', status)
+      .property('updatedAt', updatedAt);
+  }
+}
+
 export function stateMachine_task({ g, diagnostics }) {
   return {
     create: create({ g, diagnostics }),
@@ -56,6 +65,7 @@ export function stateMachine_task({ g, diagnostics }) {
     setStatus: setStatus({ g, diagnostics }),
     setStatusAndResult: setStatusAndResult({ g, diagnostics }),
     updateResultStatusUpdatedAt: updateResultStatusUpdatedAt({ g, diagnostics }),
+    updateStatusUpdatedAt: updateStatusUpdatedAt({ g, diagnostics }),
   }
 }
 

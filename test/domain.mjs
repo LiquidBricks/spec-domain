@@ -30,6 +30,13 @@ test('domain keeps gate result metadata on the state-machine edge', () => {
   )
   assert.deepEqual(
     Object.keys(domain.edge.has_gate_state.stateMachine_gateInstanceRef.schema.properties),
-    ['result', 'createdAt', 'updatedAt'],
+    ['status', 'result', 'createdAt', 'updatedAt'],
   )
+  assert.deepEqual(domain.edge.has_gate_state.stateMachine_gateInstanceRef.constants.Status, {
+    WAITING: 'waiting',
+    PROVIDED: 'provided',
+    ERROR: 'error',
+  })
+  assert.equal(domain.edge.has_data_state.stateMachine_data.constants.Status.ERROR, 'error')
+  assert.equal(domain.edge.has_task_state.stateMachine_task.constants.Status.ERROR, 'error')
 })

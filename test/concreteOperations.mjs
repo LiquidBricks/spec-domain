@@ -27,15 +27,18 @@ const concreteMutations = [
   { path: ['vertex', 'stateMachine', 'setRunning'], file: 'vertex/stateMachine/index.js' },
   { path: ['vertex', 'stateMachine', 'setComplete'], file: 'vertex/stateMachine/index.js' },
   { path: ['vertex', 'importRef', 'setLifecycleWaitFor'], file: 'vertex/importRef/index.js' },
-  { path: ['edge', 'has_gate_state', 'stateMachine_gateInstanceRef', 'setResultAndUpdatedAt'], file: 'edge/has_gate_state/stateMachine_gateInstanceRef/index.js' },
+  { path: ['edge', 'has_gate_state', 'stateMachine_gateInstanceRef', 'updateResultStatusUpdatedAt'], file: 'edge/has_gate_state/stateMachine_gateInstanceRef/index.js' },
+  { path: ['edge', 'has_gate_state', 'stateMachine_gateInstanceRef', 'updateStatusUpdatedAt'], file: 'edge/has_gate_state/stateMachine_gateInstanceRef/index.js' },
   { path: ['edge', 'has_data_state', 'stateMachine_data', 'setRunning'], file: 'edge/has_data_state/stateMachine_data/index.js' },
   { path: ['edge', 'has_data_state', 'stateMachine_data', 'setStatus'], file: 'edge/has_data_state/stateMachine_data/index.js' },
   { path: ['edge', 'has_data_state', 'stateMachine_data', 'setStatusAndResult'], file: 'edge/has_data_state/stateMachine_data/index.js' },
   { path: ['edge', 'has_data_state', 'stateMachine_data', 'updateResultStatusUpdatedAt'], file: 'edge/has_data_state/stateMachine_data/index.js' },
+  { path: ['edge', 'has_data_state', 'stateMachine_data', 'updateStatusUpdatedAt'], file: 'edge/has_data_state/stateMachine_data/index.js' },
   { path: ['edge', 'has_task_state', 'stateMachine_task', 'setRunning'], file: 'edge/has_task_state/stateMachine_task/index.js' },
   { path: ['edge', 'has_task_state', 'stateMachine_task', 'setStatus'], file: 'edge/has_task_state/stateMachine_task/index.js' },
   { path: ['edge', 'has_task_state', 'stateMachine_task', 'setStatusAndResult'], file: 'edge/has_task_state/stateMachine_task/index.js' },
   { path: ['edge', 'has_task_state', 'stateMachine_task', 'updateResultStatusUpdatedAt'], file: 'edge/has_task_state/stateMachine_task/index.js' },
+  { path: ['edge', 'has_task_state', 'stateMachine_task', 'updateStatusUpdatedAt'], file: 'edge/has_task_state/stateMachine_task/index.js' },
 ]
 
 test('dataMapper exposes concrete query implementations and colocated mutation methods', () => {
@@ -76,4 +79,56 @@ test('a concrete query executes its full traversal inside spec-domain', async ()
     ['has', 'hash', 'component-hash'],
     ['id'],
   ])
+})
+
+test('result and status-only edge updates use separate mutations and preserve supplied timestamps', async () => {
+  const edgeMappers = [
+    ['has_data_state', 'stateMachine_data'],
+    ['has_gate_state', 'stateMachine_gateInstanceRef'],
+    ['has_task_state', 'stateMachine_task'],
+  ]
+
+  for (const [edgeType, mapperName] of edgeMappers) {
+    const calls = []
+    let chain
+    chain = new Proxy({}, {
+      get(_target, method) {
+        if (method === 'then') return undefined
+        return (...args) => {
+          calls.push([method, ...args])
+          return chain
+        }
+      },
+    })
+    const mapper = dataMapper({ g: chain, diagnostics: {} })
+    const resultUpdate = mapper.edge[edgeType][mapperName].updateResultStatusUpdatedAt
+    const statusUpdate = mapper.edge[edgeType][mapperName].updateStatusUpdatedAt
+    const resultUpdatedAt = '2026-08-02T12:00:00.000Z'
+    const failureUpdatedAt = '2026-08-02T12:01:00.000Z'
+
+    await resultUpdate({
+      edgeId: 'edge-1',
+      result: '{"value":42}',
+      status: 'provided',
+      updatedAt: resultUpdatedAt,
+    })
+    assert.deepEqual(calls, [
+      ['E', 'edge-1'],
+      ['property', 'result', '{"value":42}'],
+      ['property', 'status', 'provided'],
+      ['property', 'updatedAt', resultUpdatedAt],
+    ])
+
+    calls.length = 0
+    await statusUpdate({
+      edgeId: 'edge-1',
+      status: 'error',
+      updatedAt: failureUpdatedAt,
+    })
+    assert.deepEqual(calls, [
+      ['E', 'edge-1'],
+      ['property', 'status', 'error'],
+      ['property', 'updatedAt', failureUpdatedAt],
+    ])
+  }
 })
