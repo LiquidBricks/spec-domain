@@ -45,6 +45,7 @@ import { findHasDependencyGateRefTask } from "./findHasDependencyGateRefTask.js"
 import { findHasDependencyTaskData } from "./findHasDependencyTaskData.js";
 import { findHasDependencyTaskDeferred } from "./findHasDependencyTaskDeferred.js";
 import { findHasDependencyTaskTask } from "./findHasDependencyTaskTask.js";
+import { findHasLogEdgeId } from "./findHasLogEdgeId.js";
 import { findHasTaskStateStateMachineTask } from "./findHasTaskStateStateMachineTask.js";
 import { findImportInjectionDataTargetNodeIdByName } from "./findImportInjectionDataTargetNodeIdByName.js";
 import { findImportInjectionTaskTargetNodeIdByName } from "./findImportInjectionTaskTargetNodeIdByName.js";
@@ -269,6 +270,7 @@ export function query({ g }) {
     findHasDependencyTaskData: findHasDependencyTaskData({ g }),
     findHasDependencyTaskDeferred: findHasDependencyTaskDeferred({ g }),
     findHasDependencyTaskTask: findHasDependencyTaskTask({ g }),
+    findHasLogEdgeId: findHasLogEdgeId({ g }),
     findHasTaskStateStateMachineTask: findHasTaskStateStateMachineTask({ g }),
     findImportInjectionDataTargetNodeIdByName: findImportInjectionDataTargetNodeIdByName({ g }),
     findImportInjectionTaskTargetNodeIdByName: findImportInjectionTaskTargetNodeIdByName({ g }),

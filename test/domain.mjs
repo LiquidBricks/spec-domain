@@ -18,6 +18,32 @@ test('domain includes component to agentFn edge metadata', () => {
   )
 })
 
+test('domain includes componentInstance has_log edge metadata for compute node types', () => {
+  assert.deepEqual(
+    [
+      domain.edge.has_log.componentInstance_data.constants.LABEL,
+      domain.edge.has_log.componentInstance_gateRef.constants.LABEL,
+      domain.edge.has_log.componentInstance_task.constants.LABEL,
+    ],
+    [
+      'domain.edge.has_log.componentInstance__data',
+      'domain.edge.has_log.componentInstance__gateRef',
+      'domain.edge.has_log.componentInstance__task',
+    ],
+  )
+
+  for (const edgeType of [
+    domain.edge.has_log.componentInstance_data,
+    domain.edge.has_log.componentInstance_gateRef,
+    domain.edge.has_log.componentInstance_task,
+  ]) {
+    assert.deepEqual(
+      Object.keys(edgeType.schema.properties),
+      ['logId', 'method', 'args', 'createdAt', 'updatedAt'],
+    )
+  }
+})
+
 test('domain keeps gate result metadata on the state-machine edge', () => {
   assert.equal(domain.vertex.gateInstanceRef.constants.LABEL, 'domain.vertex.gateInstanceRef')
   assert.deepEqual(
