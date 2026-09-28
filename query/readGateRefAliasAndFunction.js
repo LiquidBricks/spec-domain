@@ -1,5 +1,5 @@
 export function readGateRefAliasAndFunction({ g }) {
   return ({ vertexId }) => g
     .V(vertexId)
-    .valueMap('alias', 'fnc');
+    .valueMap('alias', 'fnc', 'router');
 }

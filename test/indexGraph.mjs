@@ -43,7 +43,7 @@ test('canonical injection edges describe the provenance needed to rebuild indexe
   ]) {
     assert.deepEqual(
       Object.keys(edge.schema.properties),
-      ['ownerComponentId', 'sourceAliasPath', 'targetAliasPath'],
+      ['ownerComponentId', 'sourceAliasPath', 'targetAliasPath', 'selectionAlias'],
     )
     assert.deepEqual(
       edge.schema.required,

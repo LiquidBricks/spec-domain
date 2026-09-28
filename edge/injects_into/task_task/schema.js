@@ -7,6 +7,7 @@ export const schema = {
   "properties": {
     "ownerComponentId": { "type": "string" },
     "sourceAliasPath": { "type": "string" },
-    "targetAliasPath": { "type": "string" }
+    "targetAliasPath": { "type": "string" },
+    "selectionAlias": { "type": "string" }
   }
 }

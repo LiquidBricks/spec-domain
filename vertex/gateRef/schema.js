@@ -11,6 +11,7 @@ export const schema = {
   ],
   "properties": {
     "alias": { "type": "string" },
+    "router": { "type": "string" },
     "fnc": { "type": "string" },
     "codeRef": {
       "type": "object",

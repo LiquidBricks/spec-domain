@@ -75,7 +75,7 @@ async function readCanonicalRoutes({ g, componentId }) {
 
     for (const injectionEdgeId of edgeIds) {
       const [[edgeValues], [sourceNodeId], [targetNodeId]] = await Promise.all([
-        g.E(injectionEdgeId).valueMap('sourceAliasPath', 'targetAliasPath'),
+        g.E(injectionEdgeId).valueMap('sourceAliasPath', 'targetAliasPath', 'selectionAlias'),
         g.E(injectionEdgeId).outV().id(),
         g.E(injectionEdgeId).inV().id(),
       ]);
@@ -91,6 +91,7 @@ async function readCanonicalRoutes({ g, componentId }) {
 
       routes.push({
         injectionEdgeId,
+        ...(readValue(edgeValues, 'selectionAlias') !== undefined ? { selectionAlias: readValue(edgeValues, 'selectionAlias') } : {}),
         source: {
           ...source,
           aliasPath: normalizeAliasPath(readValue(edgeValues, 'sourceAliasPath')),
@@ -125,6 +126,7 @@ export async function readComponentInjectionRoutingIndex({ g, componentId }) {
     && payload.routes.every(route => (
       typeof route?.injectionEdgeId === 'string'
       && route.injectionEdgeId.length
+      && (route.selectionAlias === undefined || (typeof route.selectionAlias === 'string' && route.selectionAlias.length > 0))
       && [route.source, route.target].every(endpoint => (
         endpoint
         && (endpoint.type === 'data' || endpoint.type === 'task')

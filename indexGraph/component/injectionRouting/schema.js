@@ -40,6 +40,7 @@ export const schema = {
             required: ['injectionEdgeId', 'source', 'target'],
             properties: {
               injectionEdgeId: { type: 'string' },
+              selectionAlias: { type: 'string' },
               source: endpointSchema,
               target: endpointSchema,
             },

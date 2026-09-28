@@ -23,6 +23,7 @@ export function createInjectionEdge({
   ownerComponentId,
   sourceAliasPath,
   targetAliasPath,
+  selectionAlias,
 }) {
   if (typeof ownerComponentId !== 'string' || !ownerComponentId.length) {
     throw new TypeError('Injection edge ownerComponentId is required')
@@ -30,6 +31,10 @@ export function createInjectionEdge({
   requireAliasPath(sourceAliasPath, 'sourceAliasPath')
   requireAliasPath(targetAliasPath, 'targetAliasPath')
 
+  if (selectionAlias !== undefined) {
+    if (typeof selectionAlias !== 'string' || !selectionAlias.length) throw new TypeError('selectionAlias must be a non-empty string')
+    traversal = traversal.property('selectionAlias', selectionAlias)
+  }
   return traversal
     .property('ownerComponentId', ownerComponentId)
     .property('sourceAliasPath', sourceAliasPath)

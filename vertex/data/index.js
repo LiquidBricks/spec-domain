@@ -2,15 +2,16 @@ import { schema } from "./schema.js";
 import * as constants from './constants.js'
 
 function create({ g, diagnostics }) {
-  return async function ({ name, fnc, codeRef: { file, line, column } }) {
+  return async function ({ name, fnc, router, codeRef: { file, line, column } }) {
     const now = new Date().toISOString();
-    const vertex = g
+    let vertex = g
       .addV(constants.LABEL)
       .property('name', name)
       .property('codeRef', { file, line, column })
       .property('createdAt', now)
       .property('updatedAt', now)
 
+    if (router !== undefined) vertex = vertex.property('router', router)
     if (fnc !== undefined) {
       vertex.property('fnc', fnc)
     }

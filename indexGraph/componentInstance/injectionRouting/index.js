@@ -27,6 +27,17 @@ async function readRefChild({ g, refId, definitionEdgeLabel, instanceEdgeLabel }
   const [definitionId] = definitionIds;
   const [instanceVertexId] = instanceVertexIds;
 
+  if (definitionIds.length === 1 && instanceVertexIds.length === 0 && definitionEdgeLabel === gateRefDefinitionLabel) {
+    const [row] = await g.V(definitionId).valueMap('alias', 'router');
+    if (readValue(row, 'router') !== undefined) {
+      const alias = readValue(row, 'alias');
+      if (typeof alias !== 'string' || !alias.length) {
+        throw routingIndexError('binding', 'instance_reference_alias_missing', { refId, definitionId });
+      }
+      return { alias, pending: true };
+    }
+  }
+
   if (
     definitionIds.length !== 1
     || instanceVertexIds.length !== 1
@@ -161,12 +172,17 @@ async function buildInstanceTree({ g, rootInstanceVertexId }) {
       instanceVertexId,
       stateMachineId,
       children: new Map(),
+      pendingAliases: new Set(),
       sourcesByStateEdgeId: {},
       stateEdgeByNode: new Map(),
     };
     byId.set(instanceVertexId, instance);
 
     for (const child of children) {
+      if (child.pending) {
+        instance.pendingAliases.add(child.alias);
+        continue;
+      }
       if (instance.children.has(child.alias)) {
         throw new TypeError(`Duplicate child alias ${child.alias} for instance ${instanceId}`);
       }
@@ -194,6 +210,15 @@ function resolveAliasPath(ownerInstance, aliasPath) {
   return current;
 }
 
+function isPendingPath(ownerInstance, aliasPath) {
+  let current = ownerInstance;
+  for (const alias of aliasPath) {
+    if (current?.pendingAliases.has(alias)) return true;
+    current = current?.children.get(alias);
+  }
+  return false;
+}
+
 function compareTargets(left, right) {
   return [left.instanceId, left.stateEdgeId, left.type, left.name]
     .join('\u0000')
@@ -207,7 +232,7 @@ function routingIndexError(operation, reason, details = {}) {
   );
 }
 
-async function buildBoundPayloads({ g, rootInstanceVertexId }) {
+async function buildBoundPayloads({ g, rootInstanceVertexId, selection, activatedTargets = new Set() }) {
   const { instances } = await buildInstanceTree({ g, rootInstanceVertexId });
   const planByComponentId = new Map();
 
@@ -222,6 +247,8 @@ async function buildBoundPayloads({ g, rootInstanceVertexId }) {
     }
 
     for (const route of plan.routes) {
+      if (route.selectionAlias !== undefined && !ownerInstance.children.has(route.selectionAlias)) continue;
+      if (isPendingPath(ownerInstance, route.source.aliasPath) || isPendingPath(ownerInstance, route.target.aliasPath)) continue;
       const sourceInstance = resolveAliasPath(ownerInstance, route.source.aliasPath);
       const targetInstance = resolveAliasPath(ownerInstance, route.target.aliasPath);
       if (!sourceInstance || !targetInstance) {
@@ -264,6 +291,9 @@ async function buildBoundPayloads({ g, rootInstanceVertexId }) {
         name: route.target.name,
       };
       const targetKey = `${target.instanceId}:${target.stateEdgeId}`;
+      if (selection?.ownerInstanceVertexId === ownerInstance.instanceVertexId && selection.alias === route.selectionAlias) {
+        activatedTargets.add(target.stateEdgeId);
+      }
       if (source.targets.some((candidate) => `${candidate.instanceId}:${candidate.stateEdgeId}` === targetKey)) {
         continue;
       }
@@ -291,8 +321,9 @@ async function buildBoundPayloads({ g, rootInstanceVertexId }) {
 }
 
 function bind({ g }) {
-  return async function ({ rootInstanceVertexId }) {
-    const payloads = await buildBoundPayloads({ g, rootInstanceVertexId });
+  return async function ({ rootInstanceVertexId, targetInstanceVertexIds, selection }) {
+    const activatedTargets = new Set();
+    const payloads = await buildBoundPayloads({ g, rootInstanceVertexId, selection, activatedTargets });
 
     for (const { ownerVertexId, payload } of payloads) {
       await upsertOwnerIndex({
@@ -306,7 +337,24 @@ function bind({ g }) {
       });
     }
 
-    return { indexedInstanceCount: payloads.length };
+    const result = { indexedInstanceCount: payloads.length };
+    if (targetInstanceVertexIds) {
+      const selected = new Set(targetInstanceVertexIds);
+      result.providedInjections = [];
+      for (const { payload } of payloads) {
+        for (const source of Object.values(payload.sourcesByStateEdgeId)) {
+          const targets = source.targets.filter(target => selected.has(target.instanceVertexId) || activatedTargets.has(target.stateEdgeId));
+          if (!targets.length) continue;
+          const [state] = await g.E(source.stateEdgeId).valueMap('status', 'result');
+          if (readValue(state, 'status') !== 'provided') continue;
+          const raw = readValue(state, 'result');
+          let value = raw;
+          try { value = JSON.parse(raw); } catch {}
+          for (const target of targets) result.providedInjections.push({ target, result: value });
+        }
+      }
+    }
+    return result;
   };
 }
 

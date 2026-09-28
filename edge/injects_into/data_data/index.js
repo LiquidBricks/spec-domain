@@ -9,12 +9,14 @@ function create({ g, diagnostics }) {
     ownerComponentId,
     sourceAliasPath,
     targetAliasPath,
+    selectionAlias,
   }) {
     return createInjectionEdge({
       traversal: g.addE(constants.LABEL, fromId, toId),
       ownerComponentId,
       sourceAliasPath,
       targetAliasPath,
+      selectionAlias,
     })
   }
 }
